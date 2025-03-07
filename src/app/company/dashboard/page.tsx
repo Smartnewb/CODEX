@@ -95,6 +95,35 @@ export default function CompanyDashboardPage() {
         </div>
       </header>
 
+      <div className="container mx-auto py-2 px-4 border-b">
+        <nav className="flex space-x-4">
+          <Link
+            href="/company/dashboard"
+            className="text-sm font-medium text-primary"
+          >
+            대시보드
+          </Link>
+          <Link
+            href="/company/profile"
+            className="text-sm font-medium text-muted-foreground hover:text-primary"
+          >
+            기업 프로필
+          </Link>
+          <Link
+            href="#"
+            className="text-sm font-medium text-muted-foreground hover:text-primary"
+          >
+            테스트 관리
+          </Link>
+          <Link
+            href="#"
+            className="text-sm font-medium text-muted-foreground hover:text-primary"
+          >
+            지원자 관리
+          </Link>
+        </nav>
+      </div>
+
       <main className="container mx-auto py-8 px-4">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">
