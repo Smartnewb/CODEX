@@ -30,12 +30,16 @@ export function RadarChart({
     const ctx = canvasRef.current.getContext("2d");
     if (!ctx) return;
 
+    // Set canvas dimensions to match the container
+    canvasRef.current.width = width;
+    canvasRef.current.height = height;
+
     // Clear canvas
     ctx.clearRect(0, 0, width, height);
 
     const centerX = width / 2;
     const centerY = height / 2;
-    const radius = Math.min(centerX, centerY) * 0.8;
+    const radius = Math.min(centerX, centerY) * 0.65; // Further reduced to prevent text overflow
 
     const numPoints = data.labels.length;
     const angleStep = (Math.PI * 2) / numPoints;
@@ -75,15 +79,39 @@ export function RadarChart({
       ctx.moveTo(centerX, centerY);
       ctx.lineTo(x, y);
 
-      // Draw labels
-      const labelX = centerX + (radius + 20) * Math.cos(angle);
-      const labelY = centerY + (radius + 20) * Math.sin(angle);
+      // Draw labels with better positioning
+      const labelDistance = radius + 35; // Further increased distance for labels
+      const labelX = centerX + labelDistance * Math.cos(angle);
+      const labelY = centerY + labelDistance * Math.sin(angle);
 
       ctx.font = "12px sans-serif";
       ctx.fillStyle = "#666";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(data.labels[i], labelX, labelY);
+
+      // Adjust label position based on angle to prevent distortion
+      let adjustedLabelX = labelX;
+      let adjustedLabelY = labelY;
+
+      // Adjust horizontal alignment for labels on far left/right
+      if (angle < -Math.PI * 0.25 && angle > -Math.PI * 0.75) {
+        ctx.textAlign = "right";
+        adjustedLabelX -= 5;
+      } else if (angle > Math.PI * 0.25 && angle < Math.PI * 0.75) {
+        ctx.textAlign = "left";
+        adjustedLabelX += 5;
+      }
+
+      // Adjust vertical alignment for labels on top/bottom
+      if (angle > -Math.PI * 0.25 && angle < Math.PI * 0.25) {
+        ctx.textBaseline = "top";
+        adjustedLabelY += 5;
+      } else if (angle > Math.PI * 0.75 || angle < -Math.PI * 0.75) {
+        ctx.textBaseline = "bottom";
+        adjustedLabelY -= 5;
+      }
+
+      ctx.fillText(data.labels[i], adjustedLabelX, adjustedLabelY);
     }
     ctx.stroke();
 
