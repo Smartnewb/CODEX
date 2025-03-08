@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,9 +10,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ThemeSwitcher } from "@/components/theme-switcher";
-import { ArrowRight, Clock, Plus, User } from "lucide-react";
+import { ArrowRight, Clock, Edit, Plus, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function CompanyDashboardPage() {
   // Mock data - would come from API in real app
@@ -19,7 +22,8 @@ export default function CompanyDashboardPage() {
     logo: "https://api.dicebear.com/7.x/shapes/svg?seed=company",
   };
 
-  const activeTests = [
+  // 기본 테스트 데이터
+  const defaultTests = [
     {
       id: "test-1",
       title: "프론트엔드 개발자 역량 평가",
@@ -35,6 +39,17 @@ export default function CompanyDashboardPage() {
       status: "진행중",
     },
   ];
+
+  // 클라이언트 사이드에서만 실행되도록 useEffect 사용
+  const [activeTests, setActiveTests] = useState(defaultTests);
+
+  useEffect(() => {
+    // 로컬 스토리지에서 테스트 목록 가져오기
+    const savedTests = localStorage.getItem("activeTests");
+    if (savedTests) {
+      setActiveTests(JSON.parse(savedTests));
+    }
+  }, []);
 
   const topCandidates = [
     {
@@ -110,7 +125,7 @@ export default function CompanyDashboardPage() {
             기업 프로필
           </Link>
           <Link
-            href="#"
+            href="/company/tests/manage"
             className="text-sm font-medium text-muted-foreground hover:text-primary"
           >
             테스트 관리
@@ -138,8 +153,10 @@ export default function CompanyDashboardPage() {
           <div className="md:col-span-2">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold">진행 중인 테스트</h2>
-              <Button>
-                <Plus size={16} className="mr-2" /> 새 테스트 생성
+              <Button asChild>
+                <Link href="/company/tests/create">
+                  <Plus size={16} className="mr-2" /> 새 테스트 생성
+                </Link>
               </Button>
             </div>
 
@@ -177,11 +194,16 @@ export default function CompanyDashboardPage() {
                       >
                         {test.status}
                       </span>
-                      <Button asChild>
-                        <Link href="/company/tests/results">
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm" asChild>
+                          <Link href="/company/tests/manage">
+                            <Edit size={16} className="mr-2" /> 관리
+                          </Link>
+                        </Button>
+                        <Button>
                           결과 보기 <ArrowRight size={16} className="ml-2" />
-                        </Link>
-                      </Button>
+                        </Button>
+                      </div>
                     </CardFooter>
                   </Card>
                 ))}
