@@ -4,6 +4,10 @@ const nextConfig = {
   images: {
     domains: ["images.unsplash.com", "api.dicebear.com", "www.google.com"],
   },
+  // 포트 충돌 해결을 위한 설정
+  serverOptions: {
+    port: 3001,
+  },
 };
 
 if (process.env.NEXT_PUBLIC_TEMPO) {
