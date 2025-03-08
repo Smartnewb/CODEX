@@ -153,9 +153,9 @@ export default function AssessmentHistoryPage() {
                     </div>
 
                     <div>
-                      <Button asChild>
-                        <Link href="/assessment-results">
-                          결과 보기 <ArrowRight size={16} className="ml-2" />
+                      <Button variant="outline" size="sm" asChild>
+                        <Link href="/result_for_developer">
+                          상세 결과 보기
                         </Link>
                       </Button>
                     </div>

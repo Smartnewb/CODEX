@@ -282,7 +282,7 @@ export default function CompanyTestsPage() {
                         <Eye size={16} className="mr-2" /> 모니터링
                       </Button>
                     </Link>
-                    <Link href={`/company/tests/results`}>
+                    <Link href={`/company/tests/result_for_company`}>
                       <Button size="sm">
                         결과 보기 <ArrowRight size={16} className="ml-2" />
                       </Button>
@@ -498,7 +498,7 @@ export default function CompanyTestsPage() {
                   <Button variant="outline" size="sm">
                     <Download size={16} className="mr-2" /> 결과 다운로드
                   </Button>
-                  <Link href={`/company/tests/results`}>
+                  <Link href={`/company/tests/result_for_company`}>
                     <Button size="sm">
                       상세 분석 <ArrowRight size={16} className="ml-2" />
                     </Button>
@@ -553,7 +553,7 @@ export default function CompanyTestsPage() {
                   <Button variant="outline" size="sm">
                     <Download size={16} className="mr-2" /> 결과 다운로드
                   </Button>
-                  <Link href={`/company/tests/results`}>
+                  <Link href={`/company/tests/result_for_company`}>
                     <Button size="sm">
                       상세 분석 <ArrowRight size={16} className="ml-2" />
                     </Button>

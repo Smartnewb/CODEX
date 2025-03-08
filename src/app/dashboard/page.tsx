@@ -174,8 +174,8 @@ export default function DashboardPage() {
                       <p className="text-sm">{result.feedback}</p>
                     </CardContent>
                     <CardFooter>
-                      <Button variant="outline" className="w-full" asChild>
-                        <Link href="/assessment-results">상세 결과 보기</Link>
+                      <Button variant="outline" size="sm" asChild>
+                        <Link href="/result_for_developer">상세 결과 보기</Link>
                       </Button>
                     </CardFooter>
                   </Card>
@@ -245,8 +245,8 @@ export default function DashboardPage() {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button className="w-full" asChild>
-                  <Link href="/assessment-results">전체 성장 분석 보기</Link>
+                <Button variant="outline" size="sm" asChild>
+                  <Link href="/result_for_developer">전체 성장 분석 보기</Link>
                 </Button>
               </CardFooter>
             </Card>
