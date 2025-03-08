@@ -13,7 +13,7 @@ import Link from "next/link";
 interface LearningResource {
   title: string;
   url: string;
-  type: "article" | "book" | "course";
+  type: "article" | "book" | "course" | "video";
 }
 
 interface LearningResourcesCardProps {
@@ -52,7 +52,9 @@ export function LearningResourcesCard({
                         ? "아티클"
                         : resource.type === "book"
                           ? "도서"
-                          : "강의"}
+                          : resource.type === "course"
+                            ? "강의"
+                            : "비디오"}
                     </p>
                   </div>
                 </div>

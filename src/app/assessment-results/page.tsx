@@ -202,14 +202,14 @@ fetchUserData(123)
           resources: [
             {
               title: "고급 자료구조와 알고리즘",
-              type: "course",
+              type: "course" as const,
               url: "#",
               description:
                 "해시 테이블, 트리, 그래프 등 고급 자료구조를 활용한 알고리즘 최적화 기법",
             },
             {
               title: "시간 복잡도와 공간 복잡도 분석",
-              type: "article",
+              type: "article" as const,
               url: "#",
               description: "알고리즘의 효율성을 분석하고 개선하는 방법",
             },
@@ -222,13 +222,13 @@ fetchUserData(123)
           resources: [
             {
               title: "실용적인 테스트 주도 개발",
-              type: "book",
+              type: "book" as const,
               url: "#",
               description: "TDD 방법론을 실제 프로젝트에 적용하는 방법",
             },
             {
               title: "Jest와 React Testing Library를 활용한 프론트엔드 테스팅",
-              type: "video",
+              type: "video" as const,
               url: "#",
               description: "프론트엔드 애플리케이션의 효과적인 테스트 작성법",
             },
@@ -241,13 +241,13 @@ fetchUserData(123)
           resources: [
             {
               title: "JavaScript 비동기 프로그래밍 마스터하기",
-              type: "course",
+              type: "course" as const,
               url: "#",
               description: "Promise, async/await, 이벤트 루프에 대한 심층 이해",
             },
             {
               title: "실전 비동기 에러 핸들링 전략",
-              type: "article",
+              type: "article" as const,
               url: "#",
               description: "견고한 비동기 코드를 위한 에러 처리 패턴",
             },

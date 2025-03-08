@@ -494,7 +494,7 @@ export function CodeEditor({
                       </span>
                       {testCase.passed !== undefined && (
                         <Badge
-                          variant={testCase.passed ? "success" : "destructive"}
+                          variant={testCase.passed ? "default" : "destructive"}
                         >
                           {testCase.passed ? (
                             <span className="flex items-center">

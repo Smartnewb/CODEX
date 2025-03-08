@@ -110,17 +110,17 @@ export default function CandidateResultPage({
       {
         title: "자바스크립트 성능 최적화 가이드",
         url: "#",
-        type: "article",
+        type: "article" as const,
       },
       {
         title: "클린 코드: 애자일 소프트웨어 장인 정신",
         url: "#",
-        type: "book",
+        type: "book" as const,
       },
       {
         title: "테스트 주도 개발 방법론",
         url: "#",
-        type: "course",
+        type: "course" as const,
       },
     ],
   };
