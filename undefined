@@ -1,0 +1,5 @@
+import TestResultsPage from "@/app/company/tests/results/page";
+
+export default function TestResultsView() {
+  return <TestResultsPage />;
+}

@@ -177,8 +177,10 @@ export default function CompanyDashboardPage() {
                       >
                         {test.status}
                       </span>
-                      <Button>
-                        결과 보기 <ArrowRight size={16} className="ml-2" />
+                      <Button asChild>
+                        <Link href="/company/tests/results">
+                          결과 보기 <ArrowRight size={16} className="ml-2" />
+                        </Link>
                       </Button>
                     </CardFooter>
                   </Card>
