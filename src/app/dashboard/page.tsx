@@ -10,6 +10,7 @@ import {
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { ArrowRight, Award, Clock } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function DashboardPage() {
   // Mock data - would come from API in real app
@@ -123,8 +124,10 @@ export default function DashboardPage() {
                       >
                         {test.status}
                       </span>
-                      <Button>
-                        시작하기 <ArrowRight size={16} className="ml-2" />
+                      <Button asChild>
+                        <Link href="/coding-test">
+                          시작하기 <ArrowRight size={16} className="ml-2" />
+                        </Link>
                       </Button>
                     </CardFooter>
                   </Card>
