@@ -83,24 +83,24 @@ export default function CompanyDashboardPage() {
       <header className="border-b">
         <div className="container mx-auto py-4 px-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <Image
+            {/* <Image
               src="https://api.dicebear.com/7.x/shapes/svg?seed=codeassess&backgroundColor=0066FF&radius=10"
               alt="CodeAssess AI 로고"
               width={32}
               height={32}
               className="rounded-lg"
-            />
+            /> */}
             <span className="font-bold text-lg">CodeAssess AI</span>
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <Image
+              {/* <Image
                 src="https://api.dicebear.com/7.x/shapes/svg?seed=company&backgroundColor=f5f5f5"
                 alt="회사 로고"
                 width={36}
                 height={36}
                 className="rounded-full"
-              />
+              /> */}
               <span className="text-sm font-medium hidden sm:inline">
                 {company.name}
               </span>
@@ -227,13 +227,13 @@ export default function CompanyDashboardPage() {
                   <Card key={candidate.id}>
                     <CardContent className="p-4">
                       <div className="flex items-center gap-3">
-                        <Image
+                        {/* <Image
                           src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${candidate.id}&backgroundColor=f5f5f5`}
                           alt={candidate.name}
                           width={40}
                           height={40}
                           className="rounded-full"
-                        />
+                        /> */}
                         <div className="flex-1">
                           <h3 className="font-medium">{candidate.name}</h3>
                           <p className="text-xs text-muted-foreground">

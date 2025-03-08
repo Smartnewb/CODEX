@@ -60,24 +60,24 @@ export default function DashboardPage() {
       <header className="border-b">
         <div className="container mx-auto py-4 px-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <Image
+            {/* <Image
               src="https://api.dicebear.com/7.x/shapes/svg?seed=codeassess&backgroundColor=0066FF&radius=10"
               alt="CodeAssess AI 로고"
               width={32}
               height={32}
               className="rounded-lg"
-            />
+            /> */}
             <span className="font-bold text-lg">CodeAssess AI</span>
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <Image
+              {/* <Image
                 src="https://api.dicebear.com/7.x/avataaars/svg?seed=developer&backgroundColor=f5f5f5"
                 alt="프로필 이미지"
                 width={36}
                 height={36}
                 className="rounded-full"
-              />
+              /> */}
               <span className="text-sm font-medium hidden sm:inline">
                 {user.name}
               </span>
