@@ -69,7 +69,7 @@ export default function ResultsPage() {
               height={32}
               className="rounded-lg"
             /> */}
-            <span className="font-bold text-lg">CodeAssess AI</span>
+            <span className="font-bold text-lg">CODEX</span>
           </div>
           <ThemeSwitcher />
         </div>

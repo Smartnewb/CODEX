@@ -195,7 +195,7 @@ export default function TestMonitoringPage() {
               height={32}
               className="rounded-lg"
             /> */}
-            <span className="font-bold text-lg">CodeAssess AI</span>
+            <span className="font-bold text-lg">CODEX</span>
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
