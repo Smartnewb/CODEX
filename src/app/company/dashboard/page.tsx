@@ -200,8 +200,10 @@ export default function CompanyDashboardPage() {
                             <Edit size={16} className="mr-2" /> 관리
                           </Link>
                         </Button>
-                        <Button>
-                          결과 보기 <ArrowRight size={16} className="ml-2" />
+                        <Button asChild>
+                          <Link href="/assessment-results">
+                            결과 보기 <ArrowRight size={16} className="ml-2" />
+                          </Link>
                         </Button>
                       </div>
                     </CardFooter>
