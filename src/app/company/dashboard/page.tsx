@@ -201,7 +201,7 @@ export default function CompanyDashboardPage() {
                           </Link>
                         </Button>
                         <Button asChild>
-                          <Link href="/result_for_developer">
+                          <Link href="/result_for_company">
                             결과 보기 <ArrowRight size={16} className="ml-2" />
                           </Link>
                         </Button>
