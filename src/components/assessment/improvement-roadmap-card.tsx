@@ -33,7 +33,7 @@ export function ImprovementRoadmapCard({
   weaknesses,
 }: ImprovementRoadmapCardProps) {
   // Helper function to get resource icon
-  const getResourceIcon = (type: string) => {
+  const getResourceIcon = (type: Resource['type']) => {
     switch (type) {
       case "course":
         return <BookOpen size={18} className="text-blue-500" />;
@@ -49,7 +49,7 @@ export function ImprovementRoadmapCard({
   };
 
   // Helper function to get resource type text
-  const getResourceTypeText = (type: string) => {
+  const getResourceTypeText = (type: Resource['type']) => {
     switch (type) {
       case "course":
         return "강의";
