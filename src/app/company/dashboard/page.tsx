@@ -205,13 +205,9 @@ export default function CompanyDashboardPage() {
                   <Card key={candidate.id}>
                     <CardContent className="p-4">
                       <div className="flex items-center gap-3">
-                        <Image
-                          src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${candidate.id}&backgroundColor=f5f5f5`}
-                          alt={candidate.name}
-                          width={40}
-                          height={40}
-                          className="rounded-full"
-                        />
+                        <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-xl">
+                          👨‍💻
+                        </div>
                         <div className="flex-1">
                           <h3 className="font-medium">{candidate.name}</h3>
                           <p className="text-xs text-muted-foreground">

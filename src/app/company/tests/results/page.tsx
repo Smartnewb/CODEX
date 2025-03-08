@@ -285,13 +285,9 @@ function TestResultsPageContent() {
                   <CardContent className="p-4">
                     <div className="flex flex-col md:flex-row md:items-center gap-4">
                       <div className="flex items-center gap-3 min-w-[200px]">
-                        <Image
-                          src={candidate.avatar}
-                          alt={candidate.name}
-                          width={40}
-                          height={40}
-                          className="rounded-full"
-                        />
+                        <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-xl">
+                          👨‍💻
+                        </div>
                         <div>
                           <h3 className="font-medium">{candidate.name}</h3>
                           <div className="flex items-center gap-1 mt-1">
@@ -349,7 +345,9 @@ function TestResultsPageContent() {
 
                       <div className="flex items-center gap-2">
                         <div className="flex gap-2">
-                          <Link href={`/company/tests/results/${candidate.id}`}>
+                          <Link
+                            href={`/company/tests/results/report/${candidate.id}`}
+                          >
                             <Button size="sm" variant="outline">
                               상세 분석{" "}
                               <ArrowRight size={16} className="ml-2" />
