@@ -32,11 +32,9 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 
-export function TestResultsPage() {
+export default function TestResultsPage() {
   return <TestResultsPageContent />;
 }
-
-export default TestResultsPage;
 
 function TestResultsPageContent() {
   // Mock data - would come from API in real app
