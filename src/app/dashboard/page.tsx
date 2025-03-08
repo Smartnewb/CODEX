@@ -8,8 +8,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ThemeSwitcher } from "@/components/theme-switcher";
-import { ArrowRight, Award, Clock } from "lucide-react";
+import { ArrowRight, Award, Clock, History } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function DashboardPage() {
   // Mock data - would come from API in real app
@@ -35,7 +36,7 @@ export default function DashboardPage() {
     },
   ];
 
-  const pastResults = [
+  const recentResults = [
     {
       id: "result-1",
       title: "JavaScript 알고리즘 테스트",
@@ -59,24 +60,24 @@ export default function DashboardPage() {
       <header className="border-b">
         <div className="container mx-auto py-4 px-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <Image
+            {/* <Image
               src="https://api.dicebear.com/7.x/shapes/svg?seed=codeassess&backgroundColor=0066FF&radius=10"
               alt="CodeAssess AI 로고"
               width={32}
               height={32}
               className="rounded-lg"
-            />
-            <span className="font-bold text-lg">CodeAssess AI</span>
+            /> */}
+            <span className="font-bold text-lg">CODEX</span>
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <Image
+              {/* <Image
                 src="https://api.dicebear.com/7.x/avataaars/svg?seed=developer&backgroundColor=f5f5f5"
                 alt="프로필 이미지"
                 width={36}
                 height={36}
                 className="rounded-full"
-              />
+              /> */}
               <span className="text-sm font-medium hidden sm:inline">
                 {user.name}
               </span>
@@ -98,7 +99,14 @@ export default function DashboardPage() {
 
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           <div className="md:col-span-2">
-            <h2 className="text-xl font-semibold mb-4">진행 가능한 테스트</h2>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold">진행 가능한 테스트</h2>
+              <Button variant="outline" asChild>
+                <Link href="/dashboard/assessment-history">
+                  <History size={16} className="mr-2" /> 평가 이력
+                </Link>
+              </Button>
+            </div>
             {activeTests.length > 0 ? (
               <div className="grid gap-4">
                 {activeTests.map((test) => (
@@ -123,8 +131,10 @@ export default function DashboardPage() {
                       >
                         {test.status}
                       </span>
-                      <Button>
-                        시작하기 <ArrowRight size={16} className="ml-2" />
+                      <Button asChild>
+                        <Link href="/coding-test">
+                          시작하기 <ArrowRight size={16} className="ml-2" />
+                        </Link>
                       </Button>
                     </CardFooter>
                   </Card>
@@ -142,10 +152,10 @@ export default function DashboardPage() {
           </div>
 
           <div>
-            <h2 className="text-xl font-semibold mb-4">이전 결과</h2>
-            {pastResults.length > 0 ? (
+            <h2 className="text-xl font-semibold mb-4">최근 결과</h2>
+            {recentResults.length > 0 ? (
               <div className="grid gap-4">
-                {pastResults.map((result) => (
+                {recentResults.map((result) => (
                   <Card key={result.id}>
                     <CardHeader className="pb-2">
                       <CardTitle className="text-lg">{result.title}</CardTitle>
@@ -164,8 +174,8 @@ export default function DashboardPage() {
                       <p className="text-sm">{result.feedback}</p>
                     </CardContent>
                     <CardFooter>
-                      <Button variant="outline" className="w-full">
-                        상세 결과 보기
+                      <Button variant="outline" className="w-full" asChild>
+                        <Link href="/assessment-results">상세 결과 보기</Link>
                       </Button>
                     </CardFooter>
                   </Card>
@@ -180,6 +190,66 @@ export default function DashboardPage() {
                 </CardContent>
               </Card>
             )}
+
+            <Card className="mt-4">
+              <CardHeader>
+                <CardTitle>역량 성장 분석</CardTitle>
+                <CardDescription>
+                  지난 3개월간의 역량 성장 추이입니다.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div>
+                    <div className="flex justify-between mb-1">
+                      <span className="text-sm font-medium">코드 스타일</span>
+                      <span className="text-sm font-medium text-green-600">
+                        +18%
+                      </span>
+                    </div>
+                    <div className="w-full bg-muted rounded-full h-2.5">
+                      <div
+                        className="bg-blue-600 h-2.5 rounded-full"
+                        style={{ width: "85%" }}
+                      ></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between mb-1">
+                      <span className="text-sm font-medium">문제 해결력</span>
+                      <span className="text-sm font-medium text-green-600">
+                        +5%
+                      </span>
+                    </div>
+                    <div className="w-full bg-muted rounded-full h-2.5">
+                      <div
+                        className="bg-blue-600 h-2.5 rounded-full"
+                        style={{ width: "78%" }}
+                      ></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between mb-1">
+                      <span className="text-sm font-medium">협업 능력</span>
+                      <span className="text-sm font-medium text-green-600">
+                        +10%
+                      </span>
+                    </div>
+                    <div className="w-full bg-muted rounded-full h-2.5">
+                      <div
+                        className="bg-blue-600 h-2.5 rounded-full"
+                        style={{ width: "88%" }}
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button className="w-full" asChild>
+                  <Link href="/assessment-results">전체 성장 분석 보기</Link>
+                </Button>
+              </CardFooter>
+            </Card>
           </div>
         </div>
       </main>

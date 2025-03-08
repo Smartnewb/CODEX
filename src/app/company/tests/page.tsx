@@ -129,24 +129,24 @@ export default function CompanyTestsPage() {
       <header className="border-b">
         <div className="container mx-auto py-4 px-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <Image
+            {/* <Image
               src="https://api.dicebear.com/7.x/shapes/svg?seed=codeassess&backgroundColor=0066FF&radius=10"
               alt="CodeAssess AI 로고"
               width={32}
               height={32}
               className="rounded-lg"
-            />
-            <span className="font-bold text-lg">CodeAssess AI</span>
+            /> */}
+            <span className="font-bold text-lg">CODEX</span>
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <Image
+              {/* <Image
                 src="https://api.dicebear.com/7.x/shapes/svg?seed=company&backgroundColor=f5f5f5"
                 alt="회사 로고"
                 width={36}
                 height={36}
                 className="rounded-full"
-              />
+              /> */}
               <span className="text-sm font-medium hidden sm:inline">
                 {company.name}
               </span>
@@ -315,18 +315,16 @@ export default function CompanyTestsPage() {
                     <div className="flex flex-col md:flex-row md:items-center gap-4">
                       <div className="flex items-center gap-3 min-w-[200px]">
                         <div className="relative">
-                          <Image
+                          {/* <Image
                             src={applicant.avatar}
                             alt={applicant.name}
                             width={40}
                             height={40}
                             className="rounded-full"
-                          />
-                          {applicant.alerts > 0 && (
-                            <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white text-xs">
-                              {applicant.alerts}
-                            </div>
-                          )}
+                          /> */}
+                          <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white text-xs">
+                            {applicant.alerts}
+                          </div>
                         </div>
                         <div>
                           <h3 className="font-medium">{applicant.name}</h3>
@@ -379,13 +377,13 @@ export default function CompanyTestsPage() {
                       <div className="flex flex-col md:flex-row md:items-center gap-4">
                         <div className="flex items-center gap-3 min-w-[200px]">
                           <div className="relative">
-                            <Image
+                            {/* <Image
                               src={alert.avatar}
                               alt={alert.applicant}
                               width={40}
                               height={40}
                               className="rounded-full"
-                            />
+                            /> */}
                             <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white text-xs">
                               !
                             </div>

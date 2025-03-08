@@ -1,21 +1,14 @@
-import { CompanyProfileForm } from "@/components/company/profile-form";
+import { TestCreationForm } from "@/components/company/test-creation-form";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function CompanyProfilePage() {
+export default function CreateTestPage() {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b">
-        <div className="container mx-auto py-2 px-4">
-          <Button variant="ghost" size="sm" asChild>
-            <Link href="/company/dashboard">
-              <ArrowLeft size={16} className="mr-2" /> 뒤로 가기
-            </Link>
-          </Button>
-        </div>
         <div className="container mx-auto py-4 px-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
             {/* <Image
@@ -45,15 +38,49 @@ export default function CompanyProfilePage() {
         </div>
       </header>
 
+      <div className="container mx-auto py-2 px-4 border-b">
+        <nav className="flex space-x-4">
+          <Button variant="ghost" size="sm" asChild className="mr-2">
+            <Link href="/company/dashboard">
+              <ArrowLeft size={16} className="mr-2" /> 뒤로 가기
+            </Link>
+          </Button>
+          <Link
+            href="/company/dashboard"
+            className="text-sm font-medium text-muted-foreground hover:text-primary"
+          >
+            대시보드
+          </Link>
+          <Link
+            href="/company/profile"
+            className="text-sm font-medium text-muted-foreground hover:text-primary"
+          >
+            기업 프로필
+          </Link>
+          <Link
+            href="/company/tests/create"
+            className="text-sm font-medium text-primary"
+          >
+            테스트 생성
+          </Link>
+          <Link
+            href="#"
+            className="text-sm font-medium text-muted-foreground hover:text-primary"
+          >
+            지원자 관리
+          </Link>
+        </nav>
+      </div>
+
       <main className="container mx-auto py-8 px-4">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">기업 프로필 설정</h1>
+          <h1 className="text-3xl font-bold mb-2">맞춤형 개발자 테스트 생성</h1>
           <p className="text-muted-foreground">
-            기업 정보와 기술 스택을 설정하여 맞춤형 개발자 평가를 생성하세요.
+            AI 기반으로 기업 맞춤형 개발자 평가 테스트를 생성하세요.
           </p>
         </div>
 
-        <CompanyProfileForm />
+        <TestCreationForm />
       </main>
     </div>
   );
