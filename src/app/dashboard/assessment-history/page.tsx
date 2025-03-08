@@ -66,13 +66,13 @@ export default function AssessmentHistoryPage() {
       <header className="border-b">
         <div className="container mx-auto py-4 px-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <Image
-              src="https://api.dicebear.com/7.x/shapes/svg?seed=codeassess&backgroundColor=0066FF&radius=10"
+            {/* <Image
+              src="/logo.png"
               alt="CodeAssess AI 로고"
               width={32}
               height={32}
               className="rounded-lg"
-            />
+            /> */}
             <span className="font-bold text-lg">CODEX</span>
           </div>
           <div className="flex items-center gap-4">
