@@ -40,6 +40,7 @@ import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { CompanyHeader } from "@/components/company/header";
 
 export default function CompanyTestsPage() {
   const router = useRouter();
@@ -165,64 +166,7 @@ export default function CompanyTestsPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b">
-        <div className="container mx-auto py-4 px-4 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            {/* <Image
-              src="/logo.png"
-              alt="CodeAssess AI 로고"
-              width={32}
-              height={32}
-              className="rounded-lg"
-            /> */}
-            <span className="font-bold text-lg">CODEX</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              {/* <Image
-                src={company.logo}
-                alt="회사 로고"
-                width={36}
-                height={36}
-                className="rounded-full"
-              /> */}
-              <span className="text-sm font-medium hidden sm:inline">
-                {company.name}
-              </span>
-            </div>
-            <ThemeSwitcher />
-          </div>
-        </div>
-      </header>
-
-      <div className="container mx-auto py-2 px-4 border-b">
-        <nav className="flex space-x-4">
-          <Link
-            href="/company/dashboard"
-            className="text-sm font-medium text-muted-foreground hover:text-primary"
-          >
-            대시보드
-          </Link>
-          <Link
-            href="/company/profile"
-            className="text-sm font-medium text-muted-foreground hover:text-primary"
-          >
-            기업 프로필
-          </Link>
-          <Link
-            href="/company/tests"
-            className="text-sm font-medium text-primary"
-          >
-            테스트 관리
-          </Link>
-          <Link
-            href="#"
-            className="text-sm font-medium text-muted-foreground hover:text-primary"
-          >
-            지원자 관리
-          </Link>
-        </nav>
-      </div>
+      <CompanyHeader />
 
       <main className="container mx-auto py-8 px-4">
         <div className="mb-8">

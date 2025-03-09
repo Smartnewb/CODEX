@@ -5,6 +5,7 @@ import Script from "next/script";
 import { Providers } from "./providers";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { CompanyProvider } from "@/contexts/CompanyContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,11 +25,13 @@ export default function RootLayout({
         <Script src="https://api.tempolabs.ai/proxy-asset?url=https://storage.googleapis.com/tempo-public-assets/error-handling.js" />
       </head>
       <body className={inter.className}>
-        <Providers>
-          {children}
-          <Toaster />
-          <TempoInit />
-        </Providers>
+        <CompanyProvider>
+          <Providers>
+            {children}
+            <Toaster />
+            <TempoInit />
+          </Providers>
+        </CompanyProvider>
       </body>
     </html>
   );

@@ -25,18 +25,52 @@ import {
   Trello,
   X,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useCompany } from "@/contexts/CompanyContext";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export function CompanyProfileForm() {
+  const { companyProfile, updateCompanyProfile } = useCompany();
   const [activeTab, setActiveTab] = useState("basic-info");
   const [progress, setProgress] = useState(25);
   const [techStack, setTechStack] = useState<string[]>([]);
   const [techInput, setTechInput] = useState("");
+  const [formData, setFormData] = useState({
+    companyName: companyProfile.companyName,
+    businessNumber: companyProfile.businessNumber,
+    website: companyProfile.website,
+    size: companyProfile.size,
+    description: companyProfile.description
+  });
   const [connectedServices, setConnectedServices] = useState({
     github: false,
     gitlab: false,
     jira: false,
     trello: false,
+  });
+  const [isAddPositionDialogOpen, setIsAddPositionDialogOpen] = useState(false);
+  const [newPosition, setNewPosition] = useState({
+    title: "",
+    level: "신입",
+    requiredSkills: [] as string[],
+    preferredSkills: [] as string[],
+    evaluationCriteria: [] as string[],
+    skillInput: "",
+    criteriaInput: "",
   });
 
   // Mock data for tech stack suggestions
@@ -94,6 +128,108 @@ export function CompanyProfileForm() {
     });
   };
 
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleSave = () => {
+    const profileData = {
+      ...formData,
+      techStack,
+      connectedServices,
+      updatedAt: new Date().toISOString()
+    };
+    
+    updateCompanyProfile(profileData);
+    alert('프로필이 성공적으로 저장되었습니다.');
+  };
+
+  const handleAddPosition = () => {
+    // 여기서 새로운 포지션을 추가하는 로직을 구현
+    // 실제 구현에서는 이 데이터를 상태나 API를 통해 저장해야 합니다
+    setIsAddPositionDialogOpen(false);
+    // 포지션 추가 후 초기화
+    setNewPosition({
+      title: "",
+      level: "신입",
+      requiredSkills: [],
+      preferredSkills: [],
+      evaluationCriteria: [],
+      skillInput: "",
+      criteriaInput: "",
+    });
+  };
+
+  const addSkill = (type: "required" | "preferred") => {
+    if (newPosition.skillInput.trim()) {
+      if (type === "required") {
+        setNewPosition({
+          ...newPosition,
+          requiredSkills: [...newPosition.requiredSkills, newPosition.skillInput.trim()],
+          skillInput: "",
+        });
+      } else {
+        setNewPosition({
+          ...newPosition,
+          preferredSkills: [...newPosition.preferredSkills, newPosition.skillInput.trim()],
+          skillInput: "",
+        });
+      }
+    }
+  };
+
+  const addCriteria = () => {
+    if (newPosition.criteriaInput.trim()) {
+      setNewPosition({
+        ...newPosition,
+        evaluationCriteria: [...newPosition.evaluationCriteria, newPosition.criteriaInput.trim()],
+        criteriaInput: "",
+      });
+    }
+  };
+
+  const removeSkill = (type: "required" | "preferred", skill: string) => {
+    if (type === "required") {
+      setNewPosition({
+        ...newPosition,
+        requiredSkills: newPosition.requiredSkills.filter(s => s !== skill),
+      });
+    } else {
+      setNewPosition({
+        ...newPosition,
+        preferredSkills: newPosition.preferredSkills.filter(s => s !== skill),
+      });
+    }
+  };
+
+  const removeCriteria = (criteria: string) => {
+    setNewPosition({
+      ...newPosition,
+      evaluationCriteria: newPosition.evaluationCriteria.filter(c => c !== criteria),
+    });
+  };
+
+  // 페이지 로드 시 저장된 데이터 불러오기
+  useEffect(() => {
+    setFormData({
+      companyName: companyProfile.companyName,
+      businessNumber: companyProfile.businessNumber,
+      website: companyProfile.website,
+      size: companyProfile.size,
+      description: companyProfile.description
+    });
+    setTechStack(companyProfile.techStack || []);
+    setConnectedServices(companyProfile.connectedServices || {
+      github: false,
+      gitlab: false,
+      jira: false,
+      trello: false,
+    });
+  }, [companyProfile]);
+
   return (
     <div className="space-y-6">
       <Card className="mb-6">
@@ -137,7 +273,8 @@ export function CompanyProfileForm() {
                   <Input
                     id="company-name"
                     placeholder="테크스타트 주식회사"
-                    defaultValue="테크스타트 주식회사"
+                    value={formData.companyName}
+                    onChange={(e) => handleInputChange('companyName', e.target.value)}
                   />
                 </div>
                 <div className="space-y-2">
@@ -145,7 +282,8 @@ export function CompanyProfileForm() {
                   <Input
                     id="business-number"
                     placeholder="000-00-00000"
-                    defaultValue="123-45-67890"
+                    value={formData.businessNumber}
+                    onChange={(e) => handleInputChange('businessNumber', e.target.value)}
                   />
                 </div>
               </div>
@@ -155,7 +293,8 @@ export function CompanyProfileForm() {
                 <Input
                   id="company-website"
                   placeholder="https://example.com"
-                  defaultValue="https://techstart.co.kr"
+                  value={formData.website}
+                  onChange={(e) => handleInputChange('website', e.target.value)}
                 />
               </div>
 
@@ -164,7 +303,8 @@ export function CompanyProfileForm() {
                 <select
                   id="company-size"
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                  defaultValue="10-50"
+                  value={formData.size}
+                  onChange={(e) => handleInputChange('size', e.target.value)}
                 >
                   <option value="1-9">1-9명</option>
                   <option value="10-50">10-50명</option>
@@ -180,7 +320,8 @@ export function CompanyProfileForm() {
                   id="company-description"
                   className="flex min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   placeholder="회사에 대한 간략한 소개를 입력해주세요."
-                  defaultValue="테크스타트는 혁신적인 기술 솔루션을 제공하는 IT 기업으로, 웹 및 모바일 애플리케이션 개발에 특화되어 있습니다."
+                  value={formData.description}
+                  onChange={(e) => handleInputChange('description', e.target.value)}
                 />
               </div>
             </CardContent>
@@ -216,8 +357,8 @@ export function CompanyProfileForm() {
                       }
                     }}
                   />
-                  <Button onClick={addTechStack}>
-                    <Plus size={16} className="mr-2" /> 추가
+                  <Button onClick={addTechStack} className="inline-flex items-center gap-2">
+                    <Plus size={16} /> 추가
                   </Button>
                 </div>
 
@@ -607,8 +748,13 @@ export function CompanyProfileForm() {
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <h3 className="text-lg font-medium">채용 중인 포지션</h3>
-                  <Button variant="outline" size="sm">
-                    <Plus size={16} className="mr-2" /> 포지션 추가
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => setIsAddPositionDialogOpen(true)}
+                    className="inline-flex items-center gap-2"
+                  >
+                    <Plus size={16} /> 포지션 추가
                   </Button>
                 </div>
 
@@ -747,13 +893,152 @@ export function CompanyProfileForm() {
               >
                 이전 단계
               </Button>
-              <Button>
+              <Button onClick={handleSave}>
                 <Save size={16} className="mr-2" /> 저장하기
               </Button>
             </CardFooter>
           </Card>
         </TabsContent>
       </Tabs>
+
+      <Dialog open={isAddPositionDialogOpen} onOpenChange={setIsAddPositionDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>새 포지션 추가</DialogTitle>
+            <DialogDescription>
+              새로운 채용 포지션의 정보를 입력해주세요.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-6 py-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="position-title">포지션명</Label>
+                <Input
+                  id="position-title"
+                  placeholder="예: 프론트엔드 개발자"
+                  value={newPosition.title}
+                  onChange={(e) => setNewPosition({...newPosition, title: e.target.value})}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="position-level">경력 수준</Label>
+                <Select 
+                  value={newPosition.level}
+                  onValueChange={(value) => setNewPosition({...newPosition, level: value})}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="경력 수준 선택" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="신입">신입</SelectItem>
+                    <SelectItem value="주니어">주니어 (1-3년)</SelectItem>
+                    <SelectItem value="미드레벨">미드레벨 (4-6년)</SelectItem>
+                    <SelectItem value="시니어">시니어 (7년 이상)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label>필수 기술</Label>
+              <div className="flex gap-2">
+                <Input
+                  placeholder="필수 기술 입력"
+                  value={newPosition.skillInput}
+                  onChange={(e) => setNewPosition({...newPosition, skillInput: e.target.value})}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      addSkill("required");
+                    }
+                  }}
+                />
+                <Button onClick={() => addSkill("required")} className="inline-flex items-center gap-2 whitespace-nowrap">추가</Button>
+              </div>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {newPosition.requiredSkills.map((skill) => (
+                  <Badge key={skill} variant="secondary" className="flex items-center gap-1">
+                    {skill}
+                    <X
+                      size={14}
+                      className="cursor-pointer"
+                      onClick={() => removeSkill("required", skill)}
+                    />
+                  </Badge>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label>우대 기술</Label>
+              <div className="flex gap-2">
+                <Input
+                  placeholder="우대 기술 입력"
+                  value={newPosition.skillInput}
+                  onChange={(e) => setNewPosition({...newPosition, skillInput: e.target.value})}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      addSkill("preferred");
+                    }
+                  }}
+                />
+                <Button onClick={() => addSkill("preferred")} className="inline-flex items-center gap-2 whitespace-nowrap">추가</Button>
+              </div>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {newPosition.preferredSkills.map((skill) => (
+                  <Badge key={skill} variant="outline" className="flex items-center gap-1">
+                    {skill}
+                    <X
+                      size={14}
+                      className="cursor-pointer"
+                      onClick={() => removeSkill("preferred", skill)}
+                    />
+                  </Badge>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label>평가 기준</Label>
+              <div className="flex gap-2">
+                <Input
+                  placeholder="평가 기준 입력"
+                  value={newPosition.criteriaInput}
+                  onChange={(e) => setNewPosition({...newPosition, criteriaInput: e.target.value})}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      addCriteria();
+                    }
+                  }}
+                />
+                <Button onClick={addCriteria} className="inline-flex items-center gap-2 whitespace-nowrap">추가</Button>
+              </div>
+              <div className="space-y-2 mt-2">
+                {newPosition.evaluationCriteria.map((criteria) => (
+                  <div key={criteria} className="flex items-center justify-between p-2 bg-muted rounded-md">
+                    <span>{criteria}</span>
+                    <X
+                      size={14}
+                      className="cursor-pointer"
+                      onClick={() => removeCriteria(criteria)}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsAddPositionDialogOpen(false)}>
+              취소
+            </Button>
+            <Button onClick={handleAddPosition}>포지션 추가</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
