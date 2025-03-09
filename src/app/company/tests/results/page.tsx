@@ -175,7 +175,7 @@ function TestResultsPageContent() {
             테스트 관리
           </Link>
           <Link
-            href="#"
+            href="/company/applicants"
             className="text-sm font-medium text-muted-foreground hover:text-primary"
           >
             지원자 관리
@@ -185,7 +185,7 @@ function TestResultsPageContent() {
 
       <main className="container mx-auto py-8 px-4">
         <div className="mb-6">
-          <Link href="/company/dashboard">
+          <Link href="/company/tests">
             <Button variant="ghost" className="pl-0">
               <ArrowLeft size={16} className="mr-2" /> 뒤로 가기
             </Button>
@@ -193,7 +193,17 @@ function TestResultsPageContent() {
         </div>
 
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">{testInfo.title}</h1>
+          <div className="flex items-center justify-between mb-2">
+            <h1 className="text-3xl font-bold">{testInfo.title}</h1>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm">
+                <FileText size={16} className="mr-2" /> 수정
+              </Button>
+              <Button variant="outline" size="sm" className="text-red-500 hover:text-red-600">
+                <X size={16} className="mr-2" /> 삭제
+              </Button>
+            </div>
+          </div>
           <div className="flex flex-wrap gap-4 items-center">
             <p className="text-muted-foreground">완료일: {testInfo.date}</p>
             <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">

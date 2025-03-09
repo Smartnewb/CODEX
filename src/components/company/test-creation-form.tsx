@@ -1261,7 +1261,7 @@ export function TestCreationForm({
                       );
                     }
 
-                    window.location.href = "/company/tests/manage";
+                    window.location.href = "/company/tests";
                   }}
                 >
                   {isEditing ? "테스트 수정 완료" : "테스트 배포하기"}

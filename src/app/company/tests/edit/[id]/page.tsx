@@ -25,7 +25,7 @@ export default function EditTestPage() {
         setTestTitle(test.title);
       } else {
         // 테스트를 찾을 수 없으면 관리 페이지로 리다이렉트
-        router.push("/company/tests/manage");
+        router.push("/company/tests");
       }
     }
   }, [testId, router]);
@@ -65,7 +65,7 @@ export default function EditTestPage() {
       <div className="container mx-auto py-2 px-4 border-b">
         <nav className="flex space-x-4">
           <Button variant="ghost" size="sm" asChild className="mr-2">
-            <Link href="/company/tests/manage">
+            <Link href="/company/tests">
               <ArrowLeft size={16} className="mr-2" /> 테스트 관리로 돌아가기
             </Link>
           </Button>

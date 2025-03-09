@@ -10,15 +10,25 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ThemeSwitcher } from "@/components/theme-switcher";
-import { ArrowRight, Clock, Edit, Plus, User, AlertCircle, Eye, Filter, Search, Download } from "lucide-react";
+import { ArrowRight, Clock, Edit, Plus, User, AlertCircle, Eye, Filter, Search, Download, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useRouter } from "next/navigation";
 
 export default function CompanyDashboardPage() {
+  const router = useRouter();
   // Mock data - would come from API in real app
   const company = {
     name: "테크스타트 주식회사",
@@ -159,6 +169,17 @@ export default function CompanyDashboardPage() {
     return () => clearInterval(interval);
   }, []);
 
+  const handleEditTest = (testId: string) => {
+    router.push(`/company/tests/edit/${testId}`);
+  };
+
+  const handleDeleteTest = (testId: string) => {
+    // 로컬 스토리지에서 테스트 삭제
+    const updatedTests = activeTests.filter(test => test.id !== testId);
+    setActiveTests(updatedTests);
+    localStorage.setItem("activeTests", JSON.stringify(updatedTests));
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b">
@@ -206,13 +227,13 @@ export default function CompanyDashboardPage() {
             기업 프로필
           </Link>
           <Link
-            href="/company/tests/manage"
+            href="/company/tests"
             className="text-sm font-medium text-muted-foreground hover:text-primary"
           >
             테스트 관리
           </Link>
           <Link
-            href="#"
+            href="/company/applicants"
             className="text-sm font-medium text-muted-foreground hover:text-primary"
           >
             지원자 관리
@@ -276,11 +297,35 @@ export default function CompanyDashboardPage() {
                         {test.status}
                       </span>
                       <div className="flex gap-2">
-                        <Button variant="outline" size="sm" asChild>
-                          <Link href="/company/tests/manage">
-                            <Edit size={16} className="mr-2" /> 관리
-                          </Link>
-                        </Button>
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button variant="outline" size="sm">
+                              <Edit size={16} className="mr-2" /> 관리
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>테스트 관리</DialogTitle>
+                              <DialogDescription>
+                                테스트를 수정하거나 삭제할 수 있습니다.
+                              </DialogDescription>
+                            </DialogHeader>
+                            <div className="flex justify-end gap-2 mt-4">
+                              <Button
+                                variant="outline"
+                                onClick={() => handleEditTest(test.id)}
+                              >
+                                <Edit size={16} className="mr-2" /> 수정
+                              </Button>
+                              <Button
+                                variant="destructive"
+                                onClick={() => handleDeleteTest(test.id)}
+                              >
+                                <Trash2 size={16} className="mr-2" /> 삭제
+                              </Button>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
                         <Button asChild>
                           <Link href="/company/tests/results">
                             결과 보기 <ArrowRight size={16} className="ml-2" />

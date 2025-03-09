@@ -246,7 +246,7 @@ export default function HiringDecisionPage() {
             테스트 관리
           </Link>
           <Link
-            href="#"
+            href="/company/applicants"
             className="text-sm font-medium text-muted-foreground hover:text-primary"
           >
             지원자 관리
@@ -258,7 +258,7 @@ export default function HiringDecisionPage() {
         <div className="mb-6">
           <Link href="/company/tests/results">
             <Button variant="ghost" className="pl-0">
-              <ArrowLeft size={16} className="mr-2" /> 테스트 결과로 돌아가기
+              <ArrowLeft size={16} className="mr-2" /> 뒤로 가기
             </Button>
           </Link>
         </div>

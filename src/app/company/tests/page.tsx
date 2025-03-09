@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -7,6 +9,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -20,14 +31,21 @@ import {
   Plus,
   Search,
   User,
+  X,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function CompanyTestsPage() {
+  const router = useRouter();
+  const [deleteTestId, setDeleteTestId] = useState<string | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
   // Mock data - would come from API in real app
   const company = {
     name: "테크스타트 주식회사",
@@ -123,6 +141,27 @@ export default function CompanyTestsPage() {
       time: "15분 전",
     },
   ];
+
+  // 테스트 수정 함수
+  const handleEdit = (testId: string) => {
+    router.push(`/company/tests/edit/${testId}`);
+  };
+
+  // 테스트 삭제 함수
+  const handleDelete = (testId: string) => {
+    setDeleteTestId(testId);
+    setIsDeleteDialogOpen(true);
+  };
+
+  // 테스트 삭제 확인 함수
+  const confirmDelete = () => {
+    if (deleteTestId) {
+      // TODO: API 호출하여 실제 삭제 처리
+      console.log(`테스트 ${deleteTestId} 삭제됨`);
+      setIsDeleteDialogOpen(false);
+      setDeleteTestId(null);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -232,11 +271,28 @@ export default function CompanyTestsPage() {
                           생성일: {test.createdAt}
                         </CardDescription>
                       </div>
-                      <Badge
-                        className={`${test.status === "진행중" ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" : "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300"}`}
-                      >
-                        {test.status}
-                      </Badge>
+                      <div className="flex items-start gap-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => handleEdit(test.id)}
+                        >
+                          <FileText size={16} className="mr-2" /> 수정
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="text-red-500 hover:text-red-600"
+                          onClick={() => handleDelete(test.id)}
+                        >
+                          <X size={16} className="mr-2" /> 삭제
+                        </Button>
+                        <Badge
+                          className={`${test.status === "진행중" ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" : "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300"}`}
+                        >
+                          {test.status}
+                        </Badge>
+                      </div>
                     </div>
                   </CardHeader>
                   <CardContent className="pb-2">
@@ -564,6 +620,25 @@ export default function CompanyTestsPage() {
           </TabsContent>
         </Tabs>
       </main>
+      
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>테스트 삭제</DialogTitle>
+            <DialogDescription>
+              정말로 이 테스트를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
+              취소
+            </Button>
+            <Button variant="destructive" onClick={confirmDelete}>
+              삭제
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
