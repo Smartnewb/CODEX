@@ -330,8 +330,10 @@ export default function CompanyDashboardPage() {
                       </div>
                     </CardContent>
                     <CardFooter className="pt-0 border-t">
-                      <Button variant="ghost" size="sm" className="w-full">
-                        상세 결과 보기
+                      <Button variant="ghost" size="sm" className="w-full" asChild>
+                        <Link href={`/company/tests/results/report/${candidate.id}`}>
+                          상세 결과 보기
+                        </Link>
                       </Button>
                     </CardFooter>
                   </Card>
