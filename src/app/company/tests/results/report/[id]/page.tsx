@@ -100,7 +100,7 @@ export default function DetailedReportPage({
 
       <main className="container mx-auto py-8 px-4">
         <div className="mb-6">
-          <Link href="/company/tests/result_for_company">
+          <Link href="/company/tests/results">
             <Button variant="ghost" className="pl-0">
               <ArrowLeft size={16} className="mr-2" /> 테스트 결과로 돌아가기
             </Button>

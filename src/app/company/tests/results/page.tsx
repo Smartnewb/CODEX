@@ -344,14 +344,14 @@ function TestResultsPageContent() {
                       <div className="flex items-center gap-2">
                         <div className="flex gap-2">
                           <Link
-                            href={`/company/tests/result_for_company/report/${candidate.id}`}
+                            href={`/company/tests/results/report/${candidate.id}`}
                           >
                             <Button size="sm" variant="outline">
                               상세 분석{" "}
                               <ArrowRight size={16} className="ml-2" />
                             </Button>
                           </Link>
-                          <Link href="/company/tests/result_for_company/decision">
+                          <Link href="/company/tests/results/decision">
                             <Button size="sm">
                               채용 결정{" "}
                               <ArrowRight size={16} className="ml-2" />
