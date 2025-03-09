@@ -18,18 +18,40 @@ interface ReviewFormProps {
     experience: any[];
     projects: any[];
   };
+  onSubmit: () => void;
 }
 
-export function ReviewForm({ formData }: ReviewFormProps) {
+export function ReviewForm({ formData, onSubmit }: ReviewFormProps) {
   const [agreed, setAgreed] = useState(false);
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!agreed) {
       setError("개인정보 수집 및 이용에 동의해주세요.");
       return;
     }
-    // 제출 로직
+
+    try {
+      setIsSubmitting(true);
+      console.log('저장할 프로필 데이터:', formData);
+      
+      // 로컬 스토리지에 프로필 데이터 저장
+      localStorage.setItem('developerProfile', JSON.stringify(formData));
+      console.log('프로필 저장 완료');
+      
+      // 임시 저장 데이터 삭제
+      localStorage.removeItem('profileDraft');
+      
+      // 약간의 지연 후 콜백 실행 (데이터가 완전히 저장되도록)
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      onSubmit();
+    } catch (error) {
+      console.error('프로필 저장 중 오류:', error);
+      setError("제출 중 오류가 발생했습니다. 다시 시도해주세요.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleDownloadPDF = () => {
@@ -313,8 +335,12 @@ export function ReviewForm({ formData }: ReviewFormProps) {
           <Download className="mr-2 h-4 w-4" />
           PDF 다운로드
         </Button>
-        <Button onClick={handleSubmit} className="flex-1">
-          제출하기
+        <Button 
+          onClick={handleSubmit} 
+          className="flex-1"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "제출 중..." : "제출하기"}
         </Button>
       </div>
     </div>

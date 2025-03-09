@@ -16,7 +16,20 @@ import { Card, CardContent } from "@/components/ui/card";
 import { InfoIcon } from "lucide-react";
 
 interface BasicInfoFormProps {
-  onComplete: (data: BasicInfoData) => void;
+  initialData?: {
+    name?: string;
+    email?: string;
+    phone?: string;
+    location?: string;
+    workTypes?: string[];
+  };
+  onComplete: (data: {
+    name: string;
+    email: string;
+    phone: string;
+    location: string;
+    workTypes: string[];
+  }) => void;
 }
 
 interface BasicInfoData {
@@ -56,14 +69,13 @@ const LOCATIONS = [
   "리모트",
 ];
 
-export function BasicInfoForm({ onComplete }: BasicInfoFormProps) {
-  const [formData, setFormData] = useState<BasicInfoData>({
-    name: "",
-    email: "",
-    phone: "",
-    location: "",
-    preferredLocations: [],
-    workTypes: [],
+export function BasicInfoForm({ initialData, onComplete }: BasicInfoFormProps) {
+  const [formData, setFormData] = useState({
+    name: initialData?.name || "",
+    email: initialData?.email || "",
+    phone: initialData?.phone || "",
+    location: initialData?.location || "",
+    workTypes: initialData?.workTypes || [],
   });
 
   const [errors, setErrors] = useState<Partial<BasicInfoData>>({});

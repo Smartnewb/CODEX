@@ -169,7 +169,7 @@ export default function AssessmentHistoryPage() {
 
                     <div>
                       <Button variant="outline" size="sm" asChild>
-                        <Link href={`/result_for_developer/${assessment.type}/${assessment.testId}`}>
+                        <Link href={`/result_for_developer/test/${assessment.testId}`}>
                           상세 결과 보기
                         </Link>
                       </Button>
