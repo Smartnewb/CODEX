@@ -185,9 +185,9 @@ function TestResultsPageContent() {
 
       <main className="container mx-auto py-8 px-4">
         <div className="mb-6">
-          <Link href="/company/tests">
+          <Link href="/company/dashboard">
             <Button variant="ghost" className="pl-0">
-              <ArrowLeft size={16} className="mr-2" /> 테스트 관리로 돌아가기
+              <ArrowLeft size={16} className="mr-2" /> 뒤로 가기
             </Button>
           </Link>
         </div>
