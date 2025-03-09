@@ -282,7 +282,7 @@ export default function CompanyDashboardPage() {
                           </Link>
                         </Button>
                         <Button asChild>
-                          <Link href="/company/tests/results/decision">
+                          <Link href="/company/tests/results">
                             결과 보기 <ArrowRight size={16} className="ml-2" />
                           </Link>
                         </Button>
