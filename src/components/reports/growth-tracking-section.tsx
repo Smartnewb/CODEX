@@ -33,12 +33,12 @@ export function GrowthTrackingSection({
       {
         label: "현재 평가",
         data: [85, 78, 65, 90, 82],
-        backgroundColor: "rgba(0, 102, 255, 0.8)",
+        backgroundColor: ["rgba(0, 102, 255, 0.8)", "rgba(0, 102, 255, 0.8)", "rgba(0, 102, 255, 0.8)", "rgba(0, 102, 255, 0.8)", "rgba(0, 102, 255, 0.8)"],
       },
       {
         label: "이전 평가",
         data: [75, 70, 50, 85, 80],
-        backgroundColor: "rgba(255, 99, 132, 0.8)",
+        backgroundColor: ["rgba(255, 99, 132, 0.8)", "rgba(255, 99, 132, 0.8)", "rgba(255, 99, 132, 0.8)", "rgba(255, 99, 132, 0.8)", "rgba(255, 99, 132, 0.8)"],
       },
     ],
   };
