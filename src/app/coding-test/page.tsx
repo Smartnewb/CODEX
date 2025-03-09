@@ -36,18 +36,135 @@ import {
   BarChart,
   HelpCircle,
   Keyboard,
-  Files,
+  FolderOpen,
   Search,
   AlertCircle,
 } from "lucide-react";
 import Link from "next/link";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { useRouter } from "next/navigation";
+
+// Sample initial code
+const initialCode = `/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number[]}
+ */
+function twoSum(nums, target) {
+  // Write your solution here
+  
+}
+
+// Example usage:
+console.log(twoSum([2, 7, 11, 15], 9)); // Expected: [0, 1]
+console.log(twoSum([3, 2, 4], 6));      // Expected: [1, 2]
+console.log(twoSum([3, 3], 6));         // Expected: [0, 1]
+`;
 
 export default function CodingTestPage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("environment");
   const [activeSideTab, setActiveSideTab] = useState("explorer");
   const [activeEditorTab, setActiveEditorTab] = useState("solution.js");
   const [showKeyboardShortcuts, setShowKeyboardShortcuts] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(60 * 60); // 60 minutes in seconds
+  const [code, setCode] = useState(initialCode);
+  const [output, setOutput] = useState<string[]>([]);
+  const [isRunning, setIsRunning] = useState(false);
+  const [showFeedbackForm, setShowFeedbackForm] = useState(false);
+  const [terminalHistory, setTerminalHistory] = useState<string[]>([]);
+  const [commitMessage, setCommitMessage] = useState("");
+  const [files, setFiles] = useState<Record<string, string>>({
+    "solution.js": initialCode,
+    "test.js": `// Test cases for Two Sum problem
+const assert = require('assert');
+
+describe('Two Sum', () => {
+  it('should return indices of two numbers that add up to target', () => {
+    assert.deepStrictEqual(twoSum([2, 7, 11, 15], 9), [0, 1]);
+    assert.deepStrictEqual(twoSum([3, 2, 4], 6), [1, 2]);
+    assert.deepStrictEqual(twoSum([3, 3], 6), [0, 1]);
+  });
+});`,
+    "README.md": `# Two Sum Problem
+
+This is a coding test implementation for the Two Sum problem.
+
+## Problem Description
+
+Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
+
+## Solution Approach
+
+1. Use a hash map to store complements
+2. Time Complexity: O(n)
+3. Space Complexity: O(n)
+`
+  });
+
+  const [showFileMenu, setShowFileMenu] = useState(false);
+  const [showEditMenu, setShowEditMenu] = useState(false);
+  const [showViewMenu, setShowViewMenu] = useState(false);
+  const [showRunMenu, setShowRunMenu] = useState(false);
+  const [showHelpMenu, setShowHelpMenu] = useState(false);
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<string[]>([]);
+  const [selectedFile, setSelectedFile] = useState<string | null>(null);
+  const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set(["코딩 테스트"]));
+
+  const [showSubmitModal, setShowSubmitModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // 파일 내용 업데이트 함수
+  const updateFileContent = (filename: string, content: string) => {
+    setFiles(prev => ({
+      ...prev,
+      [filename]: content
+    }));
+  };
+
+  // 코드 에디터 변경 핸들러
+  const handleCodeChange = (newCode: string) => {
+    setCode(newCode);
+    updateFileContent(activeEditorTab, newCode);
+  };
+
+  // 메뉴 컴포넌트
+  const Menu = ({ items, show, onClose }: { items: any[]; show: boolean; onClose: () => void }) => {
+    if (!show) return null;
+    
+    return (
+      <div className="absolute top-full left-0 mt-1 bg-background border rounded-md shadow-lg z-50 min-w-[200px]">
+        <div className="py-1">
+          {items.map((item, index) => (
+            <button
+              key={index}
+              className="w-full px-4 py-2 text-sm text-left hover:bg-muted flex items-center justify-between whitespace-nowrap"
+              onClick={() => {
+                if (item.action) item.action();
+                onClose();
+              }}
+            >
+              <span className="mr-4">{item.label}</span>
+              {item.shortcut && (
+                <span className="text-xs text-muted-foreground whitespace-nowrap">
+                  {item.shortcut}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  };
 
   // Format time remaining as MM:SS
   const formatTime = (seconds: number) => {
@@ -101,23 +218,6 @@ export default function CodingTestPage() {
       "Only one valid answer exists.",
     ],
   };
-
-  // Sample initial code
-  const initialCode = `/**
- * @param {number[]} nums
- * @param {number} target
- * @return {number[]}
- */
-function twoSum(nums, target) {
-  // Write your solution here
-  
-}
-
-// Example usage:
-console.log(twoSum([2, 7, 11, 15], 9)); // Expected: [0, 1]
-console.log(twoSum([3, 2, 4], 6));      // Expected: [1, 2]
-console.log(twoSum([3, 3], 6));         // Expected: [0, 1]
-`;
 
   // Keyboard shortcuts modal
   const KeyboardShortcutsModal = () => (
@@ -176,6 +276,154 @@ console.log(twoSum([3, 3], 6));         // Expected: [0, 1]
     </div>
   );
 
+  // 코드 실행 함수
+  const runCode = async () => {
+    setIsRunning(true);
+    setOutput([]);
+    
+    try {
+      // 실제 환경에서는 서버로 코드를 보내 실행하게 됩니다
+      const testCases = [
+        { nums: [2, 7, 11, 15], target: 9 },
+        { nums: [3, 2, 4], target: 6 },
+        { nums: [3, 3], target: 6 }
+      ];
+
+      setTerminalHistory(prev => [...prev, `$ node solution.js`]);
+      
+      // 실행 결과 시뮬레이션
+      setTimeout(() => {
+        const results = [
+          "[0, 1]",
+          "[1, 2]",
+          "[0, 1]"
+        ];
+        
+        setOutput(results);
+        setTerminalHistory(prev => [...prev, ...results, "코드 실행이 완료되었습니다."]);
+        setIsRunning(false);
+      }, 1000);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : '알 수 없는 에러가 발생했습니다.';
+      setOutput([`Error: ${errorMessage}`]);
+      setTerminalHistory(prev => [...prev, `Error: ${errorMessage}`]);
+      setIsRunning(false);
+    }
+  };
+
+  // 코드 저장 함수
+  const saveCode = async () => {
+    try {
+      // 실제 환경에서는 서버에 저장하게 됩니다
+      localStorage.setItem('savedCode', code);
+      setTerminalHistory(prev => [...prev, "$ git add solution.js", "$ git commit -m 'Update solution'"]);
+      
+      // 저장 성공 메시지를 터미널에 표시
+      setTerminalHistory(prev => [...prev, "코드가 성공적으로 저장되었습니다."]);
+    } catch (error) {
+      setTerminalHistory(prev => [...prev, "코드 저장 중 오류가 발생했습니다."]);
+    }
+  };
+
+  // 코드 제출 함수
+  const submitSolution = async () => {
+    setIsSubmitting(true);
+    try {
+      // 실제 환경에서는 서버로 제출하게 됩니다
+      await runCode();
+      setTerminalHistory(prev => [...prev, "제출이 완료되었습니다."]);
+      setShowSubmitModal(true);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : '알 수 없는 에러가 발생했습니다.';
+      setOutput([`Error: ${errorMessage}`]);
+      setTerminalHistory(prev => [...prev, `Error: ${errorMessage}`]);
+    }
+    setIsSubmitting(false);
+  };
+
+  // 결과 페이지로 이동
+  const goToResults = () => {
+    router.push('/result_for_developer');
+  };
+
+  // 키보드 단축키 핸들러
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey) {
+        switch (e.key) {
+          case 'Enter':
+            e.preventDefault();
+            if (e.shiftKey) {
+              submitSolution();
+            } else {
+              runCode();
+            }
+            break;
+          case 's':
+            e.preventDefault();
+            saveCode();
+            break;
+          case '`':
+            e.preventDefault();
+            setActiveTab(prev => prev === 'terminal' ? 'output' : 'terminal');
+            break;
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // 파일 선택 핸들러
+  const handleFileSelect = (filename: string) => {
+    setActiveEditorTab(filename);
+    setCode(files[filename]);
+  };
+
+  // Git 커밋 핸들러
+  const handleCommit = () => {
+    if (!commitMessage.trim()) return;
+    
+    setTerminalHistory(prev => [
+      ...prev,
+      `$ git add .`,
+      `$ git commit -m "${commitMessage}"`,
+      `[main ${Math.random().toString(36).substring(7)}] ${commitMessage}`,
+      ` 1 file changed, 5 insertions(+), 2 deletions(-)`
+    ]);
+    
+    setCommitMessage("");
+  };
+
+  // 검색 핸들러
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    if (!query.trim()) {
+      setSearchResults([]);
+      return;
+    }
+    
+    // 파일 내용에서 검색
+    const results = Object.entries(files).filter(([filename, content]) => 
+      filename.toLowerCase().includes(query.toLowerCase()) ||
+      content.toLowerCase().includes(query.toLowerCase())
+    ).map(([filename]) => filename);
+    
+    setSearchResults(results);
+  };
+
+  // 폴더 토글 핸들러
+  const toggleFolder = (folderName: string) => {
+    const newExpandedFolders = new Set(expandedFolders);
+    if (newExpandedFolders.has(folderName)) {
+      newExpandedFolders.delete(folderName);
+    } else {
+      newExpandedFolders.add(folderName);
+    }
+    setExpandedFolders(newExpandedFolders);
+  };
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <KeyboardShortcutsModal />
@@ -191,12 +439,117 @@ console.log(twoSum([3, 3], 6));         // Expected: [0, 1]
               <ArrowLeft size={16} />
             </Link>
             <span className="font-bold">CodeAssess AI</span>
-            <div className="ml-4 flex space-x-2 text-xs">
-              <button className="hover:text-primary">File</button>
-              <button className="hover:text-primary">Edit</button>
-              <button className="hover:text-primary">View</button>
-              <button className="hover:text-primary">Run</button>
-              <button className="hover:text-primary">Help</button>
+            <div className="ml-4 flex space-x-2 text-xs relative">
+              <button 
+                className={`hover:text-primary px-2 py-1 relative ${showFileMenu ? 'bg-muted' : ''}`}
+                onClick={() => {
+                  setShowFileMenu(!showFileMenu);
+                  setShowEditMenu(false);
+                  setShowViewMenu(false);
+                  setShowRunMenu(false);
+                  setShowHelpMenu(false);
+                }}
+              >
+                파일
+                <Menu 
+                  items={[
+                    { label: "새 파일", shortcut: "Ctrl+N" },
+                    { label: "파일 열기", shortcut: "Ctrl+O" },
+                    { label: "저장", shortcut: "Ctrl+S", action: saveCode },
+                    { label: "다른 이름으로 저장", shortcut: "Ctrl+Shift+S" },
+                    { label: "종료", shortcut: "Alt+F4" },
+                  ]} 
+                  show={showFileMenu} 
+                  onClose={() => setShowFileMenu(false)} 
+                />
+              </button>
+              <button 
+                className={`hover:text-primary px-2 py-1 relative ${showEditMenu ? 'bg-muted' : ''}`}
+                onClick={() => {
+                  setShowEditMenu(!showEditMenu);
+                  setShowFileMenu(false);
+                  setShowViewMenu(false);
+                  setShowRunMenu(false);
+                  setShowHelpMenu(false);
+                }}
+              >
+                편집
+                <Menu 
+                  items={[
+                    { label: "실행 취소", shortcut: "Ctrl+Z" },
+                    { label: "다시 실행", shortcut: "Ctrl+Y" },
+                    { label: "잘라내기", shortcut: "Ctrl+X" },
+                    { label: "복사", shortcut: "Ctrl+C" },
+                    { label: "붙여넣기", shortcut: "Ctrl+V" },
+                  ]} 
+                  show={showEditMenu} 
+                  onClose={() => setShowEditMenu(false)} 
+                />
+              </button>
+              <button 
+                className={`hover:text-primary px-2 py-1 relative ${showViewMenu ? 'bg-muted' : ''}`}
+                onClick={() => {
+                  setShowViewMenu(!showViewMenu);
+                  setShowFileMenu(false);
+                  setShowEditMenu(false);
+                  setShowRunMenu(false);
+                  setShowHelpMenu(false);
+                }}
+              >
+                보기
+                <Menu 
+                  items={[
+                    { label: "탐색기", shortcut: "Ctrl+Shift+E" },
+                    { label: "검색", shortcut: "Ctrl+Shift+F" },
+                    { label: "소스 제어", shortcut: "Ctrl+Shift+G" },
+                    { label: "터미널", shortcut: "Ctrl+`" },
+                  ]} 
+                  show={showViewMenu} 
+                  onClose={() => setShowViewMenu(false)} 
+                />
+              </button>
+              <button 
+                className={`hover:text-primary px-2 py-1 relative ${showRunMenu ? 'bg-muted' : ''}`}
+                onClick={() => {
+                  setShowRunMenu(!showRunMenu);
+                  setShowFileMenu(false);
+                  setShowEditMenu(false);
+                  setShowViewMenu(false);
+                  setShowHelpMenu(false);
+                }}
+              >
+                실행
+                <Menu 
+                  items={[
+                    { label: "코드 실행", shortcut: "Ctrl+Enter", action: runCode },
+                    { label: "디버그", shortcut: "F5" },
+                    { label: "제출", shortcut: "Ctrl+Shift+Enter", action: submitSolution },
+                  ]} 
+                  show={showRunMenu} 
+                  onClose={() => setShowRunMenu(false)} 
+                />
+              </button>
+              <button 
+                className={`hover:text-primary px-2 py-1 relative ${showHelpMenu ? 'bg-muted' : ''}`}
+                onClick={() => {
+                  setShowHelpMenu(!showHelpMenu);
+                  setShowFileMenu(false);
+                  setShowEditMenu(false);
+                  setShowViewMenu(false);
+                  setShowRunMenu(false);
+                }}
+              >
+                도움말
+                <Menu 
+                  items={[
+                    { label: "문서", shortcut: "F1" },
+                    { label: "단축키", action: () => setShowKeyboardShortcuts(true) },
+                    { label: "피드백", action: () => setShowFeedbackForm(true) },
+                  ]} 
+                  show={showHelpMenu} 
+                  onClose={() => setShowHelpMenu(false)} 
+                />
+              </button>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -226,7 +579,7 @@ console.log(twoSum([3, 3], 6));         // Expected: [0, 1]
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Keyboard Shortcuts</p>
+                  <p>단축키</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -235,19 +588,30 @@ console.log(twoSum([3, 3], 6));         // Expected: [0, 1]
         </div>
       </header>
 
-      <main className="flex-1 flex flex-col">
+      <main className="container mx-auto py-8 px-4">
+        <div className="mb-6">
+          <Link href="/dashboard/assessment-history">
+            <Button variant="ghost" className="pl-0">
+              <ArrowLeft size={16} className="mr-2" /> 평가 이력으로 돌아가기
+            </Button>
+          </Link>
+        </div>
         {/* VS Code-style tabs for open files */}
         <div className="flex items-center border-b bg-muted/20 px-2">
           <div className="flex">
-            {["solution.js", "test.js"].map((tab) => (
+            {Object.keys(files).map((filename) => (
               <button
-                key={tab}
-                className={`px-3 py-1 text-xs flex items-center gap-1 ${activeEditorTab === tab ? "bg-background border-t border-l border-r border-b-0" : "text-muted-foreground"}`}
-                onClick={() => setActiveEditorTab(tab)}
+                key={filename}
+                className={`px-3 py-1 text-xs flex items-center gap-1 ${
+                  activeEditorTab === filename
+                    ? "bg-background border-t border-l border-r border-b-0"
+                    : "text-muted-foreground"
+                }`}
+                onClick={() => handleFileSelect(filename)}
               >
                 <FileCode size={14} />
-                {tab}
-                {activeEditorTab === tab && (
+                {filename}
+                {activeEditorTab === filename && (
                   <span className="ml-2 text-muted-foreground">×</span>
                 )}
               </button>
@@ -257,36 +621,53 @@ console.log(twoSum([3, 3], 6));         // Expected: [0, 1]
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-7 w-7">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-7 w-7"
+                    onClick={saveCode}
+                  >
                     <Save size={14} />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Save (Ctrl+S)</p>
+                  <p>저장 (Ctrl+S)</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-7 w-7">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-7 w-7"
+                    onClick={runCode}
+                    disabled={isRunning}
+                  >
                     <Play size={14} />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Run Code (Ctrl+Enter)</p>
+                  <p>코드 실행 (Ctrl+Enter)</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-7 w-7">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-7 w-7"
+                    onClick={submitSolution}
+                    disabled={isSubmitting}
+                  >
                     <Send size={14} />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Submit Solution (Ctrl+Shift+Enter)</p>
+                  <p>제출 (Ctrl+Shift+Enter)</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -310,7 +691,7 @@ console.log(twoSum([3, 3], 6));         // Expected: [0, 1]
                         }
                         onClick={() => setActiveSideTab("explorer")}
                       >
-                        <Files size={20} />
+                        <FolderOpen size={20} />
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent side="right">
@@ -420,108 +801,228 @@ console.log(twoSum([3, 3], 6));         // Expected: [0, 1]
               <div className="flex-1 border-r overflow-auto">
                 {activeSideTab === "explorer" && (
                   <div className="p-3">
-                    <h3 className="text-xs font-semibold mb-2 uppercase">
-                      Explorer
-                    </h3>
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="text-xs font-semibold uppercase">탐색기</h3>
+                      <div className="flex gap-1">
+                        <Button variant="ghost" size="icon" className="h-6 w-6">
+                          <FileCode size={14} />
+                        </Button>
+                        <Button variant="ghost" size="icon" className="h-6 w-6">
+                          <FolderOpen size={14} />
+                        </Button>
+                        <Button variant="ghost" size="icon" className="h-6 w-6">
+                          <ArrowLeft size={14} />
+                        </Button>
+                      </div>
+                    </div>
                     <div className="text-sm">
                       <div className="mb-2">
-                        <div className="font-semibold mb-1">CODING TEST</div>
-                        <div className="pl-4 flex flex-col gap-1">
-                          <div className="flex items-center gap-1 text-primary cursor-pointer">
-                            <FileCode size={14} /> solution.js
-                          </div>
-                          <div className="flex items-center gap-1 text-muted-foreground cursor-pointer">
-                            <FileCode size={14} /> test.js
-                          </div>
-                          <div className="flex items-center gap-1 text-muted-foreground cursor-pointer">
-                            <FileCode size={14} /> README.md
-                          </div>
+                        <div 
+                          className="flex items-center gap-1 cursor-pointer hover:bg-muted/50 px-2 py-1 rounded"
+                          onClick={() => toggleFolder("코딩 테스트")}
+                        >
+                          <span className="text-xs">{expandedFolders.has("코딩 테스트") ? "▼" : "▶"}</span>
+                          <span className="font-semibold">코딩 테스트</span>
                         </div>
+                        {expandedFolders.has("코딩 테스트") && (
+                          <div className="pl-4 flex flex-col gap-1 mt-1">
+                            {Object.keys(files).map((filename) => (
+                              <div
+                                key={filename}
+                                className={`flex items-center gap-1 cursor-pointer hover:bg-muted/50 px-2 py-1 rounded ${
+                                  activeEditorTab === filename
+                                    ? "bg-muted/70 text-primary"
+                                    : "text-muted-foreground"
+                                }`}
+                                onClick={() => handleFileSelect(filename)}
+                              >
+                                <FileCode size={14} /> {filename}
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
                 )}
 
+                {activeSideTab === "search" && (
+                  <div className="p-3">
+                    <div className="mb-3">
+                      <input
+                        type="text"
+                        placeholder="검색어를 입력하세요"
+                        className="w-full px-3 py-1.5 text-sm bg-muted/30 border rounded"
+                        value={searchQuery}
+                        onChange={(e) => handleSearch(e.target.value)}
+                      />
+                    </div>
+                    {searchQuery && (
+                      <div className="text-sm">
+                        <div className="text-xs text-muted-foreground mb-2">
+                          {searchResults.length}개의 결과
+                        </div>
+                        {searchResults.map((filename) => (
+                          <div
+                            key={filename}
+                            className="flex items-center gap-2 cursor-pointer hover:bg-muted/50 px-2 py-1.5 rounded"
+                            onClick={() => handleFileSelect(filename)}
+                          >
+                            <FileCode size={14} />
+                            <div>
+                              <div className="font-medium">{filename}</div>
+                              <div className="text-xs text-muted-foreground">코딩 테스트</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 {activeSideTab === "git" && (
                   <div className="p-3">
-                    <h3 className="text-xs font-semibold mb-2 uppercase">
-                      Source Control
-                    </h3>
+                    <h3 className="text-xs font-semibold mb-2 uppercase">소스 제어</h3>
                     <div className="text-sm">
-                      <div className="mb-2">
-                        <div className="font-semibold mb-1">Changes</div>
+                      <div className="mb-3">
+                        <div className="font-semibold mb-2">변경사항</div>
                         <div className="pl-4 flex flex-col gap-1">
-                          <div className="flex items-center gap-1 text-muted-foreground">
-                            <span className="text-green-500">M</span>{" "}
-                            solution.js
+                          <div className="flex items-center gap-1 text-muted-foreground hover:bg-muted/50 px-2 py-1 rounded cursor-pointer">
+                            <span className="text-green-500">M</span> solution.js
+                            <span className="ml-auto text-xs">+15 -5</span>
+                          </div>
+                          <div className="flex items-center gap-1 text-muted-foreground hover:bg-muted/50 px-2 py-1 rounded cursor-pointer">
+                            <span className="text-green-500">M</span> test.js
+                            <span className="ml-auto text-xs">+3 -1</span>
                           </div>
                         </div>
                       </div>
-                      <input
-                        type="text"
-                        placeholder="Commit message"
-                        className="w-full text-xs p-1 bg-muted/30 border rounded mt-2"
-                      />
-                      <Button size="sm" className="w-full mt-2">
-                        Commit & Push
-                      </Button>
+                      <div className="space-y-2">
+                        <input
+                          type="text"
+                          placeholder="커밋 메시지 입력 (Enter to commit)"
+                          className="w-full text-xs p-2 bg-muted/30 border rounded"
+                          value={commitMessage}
+                          onChange={(e) => setCommitMessage(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' && commitMessage.trim()) {
+                              handleCommit();
+                            }
+                          }}
+                        />
+                        <div className="flex gap-2">
+                          <Button 
+                            size="sm" 
+                            className="flex-1"
+                            onClick={handleCommit}
+                            disabled={!commitMessage.trim()}
+                          >
+                            Commit
+                          </Button>
+                          <Button 
+                            size="sm"
+                            variant="outline"
+                            className="flex-1"
+                          >
+                            Discard
+                          </Button>
+                        </div>
+                        <div className="text-xs text-muted-foreground mt-2">
+                          마지막 커밋: 5분 전
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )}
 
                 {activeSideTab === "suggestions" && (
                   <div className="p-3">
-                    <h3 className="text-xs font-semibold mb-2 uppercase">
-                      AI Suggestions
-                    </h3>
+                    <h3 className="text-xs font-semibold mb-2 uppercase">AI Suggestions</h3>
                     <div className="text-sm space-y-3">
-                      <div className="p-2 border rounded bg-muted/30">
-                        <div className="font-medium mb-1">
-                          Optimize with Hash Map
+                      <div className="p-3 border rounded bg-muted/30">
+                        <div className="font-medium mb-1 flex items-center justify-between">
+                          <span>코드 최적화 제안</span>
+                          <Badge variant="outline" className="text-xs">
+                            성능
+                          </Badge>
                         </div>
                         <p className="text-xs text-muted-foreground mb-2">
-                          Use a hash map to achieve O(n) time complexity instead
-                          of nested loops.
+                          해시맵을 사용하여 시간 복잡도를 O(n²)에서 O(n)으로 개선할 수 있습니다.
                         </p>
+                        <div className="text-xs bg-muted/50 p-2 rounded mb-2 font-mono">
+                          {`const map = new Map();
+for (let i = 0; i < nums.length; i++) {
+    const complement = target - nums[i];
+    if (map.has(complement)) {
+        return [map.get(complement), i];
+    }
+    map.set(nums[i], i);
+}`}
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="text-xs flex-1"
+                          >
+                            적용하기
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="text-xs"
+                          >
+                            무시
+                          </Button>
+                        </div>
+                      </div>
+
+                      <div className="p-3 border rounded bg-muted/30">
+                        <div className="font-medium mb-1 flex items-center justify-between">
+                          <span>입력값 검증</span>
+                          <Badge variant="outline" className="text-xs">
+                            안정성
+                          </Badge>
+                        </div>
+                        <p className="text-xs text-muted-foreground mb-2">
+                          배열이 비어있거나 유효하지 않은 입력에 대한 처리가 필요합니다.
+                        </p>
+                        <div className="text-xs bg-muted/50 p-2 rounded mb-2 font-mono">
+                          {`if (!nums || nums.length < 2) {
+    throw new Error("Invalid input");
+}`}
+                        </div>
                         <Button
                           size="sm"
                           variant="outline"
                           className="text-xs w-full"
                         >
-                          Apply Suggestion
+                          적용하기
                         </Button>
                       </div>
 
-                      <div className="p-2 border rounded bg-muted/30">
-                        <div className="font-medium mb-1">
-                          Add Input Validation
+                      <div className="p-3 border rounded bg-muted/30">
+                        <div className="font-medium mb-1 flex items-center justify-between">
+                          <span>테스트 케이스 추가</span>
+                          <Badge variant="outline" className="text-xs">
+                            테스트
+                          </Badge>
                         </div>
                         <p className="text-xs text-muted-foreground mb-2">
-                          Check for edge cases like empty arrays or invalid
-                          inputs.
+                          엣지 케이스에 대한 테스트를 추가하는 것이 좋습니다.
                         </p>
+                        <div className="text-xs bg-muted/50 p-2 rounded mb-2 font-mono">
+                          {`test("edge cases", () => {
+    expect(() => twoSum([], 0)).toThrow();
+    expect(twoSum([1], 1)).toBeNull();
+});`}
+                        </div>
                         <Button
                           size="sm"
                           variant="outline"
                           className="text-xs w-full"
                         >
-                          Apply Suggestion
-                        </Button>
-                      </div>
-
-                      <div className="p-2 border rounded bg-muted/30">
-                        <div className="font-medium mb-1">
-                          Community Solution
-                        </div>
-                        <p className="text-xs text-muted-foreground mb-2">
-                          View a highly-rated solution from the community.
-                        </p>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="text-xs w-full"
-                        >
-                          View Solution
+                          테스트 추가
                         </Button>
                       </div>
                     </div>
@@ -538,9 +1039,13 @@ console.log(twoSum([3, 3], 6));         // Expected: [0, 1]
             <div className="h-full flex flex-col">
               <div className="flex-1">
                 <CodeEditor
-                  initialCode={initialCode}
-                  language="javascript"
+                  initialCode={files[activeEditorTab]}
+                  language={activeEditorTab.endsWith('.js') ? 'javascript' : 'markdown'}
                   timeLimit={problem.timeLimit}
+                  onChange={(newCode) => {
+                    setCode(newCode);
+                    updateFileContent(activeEditorTab, newCode);
+                  }}
                 />
               </div>
 
@@ -857,16 +1362,40 @@ console.log(twoSum([3, 3], 6));         // Expected: [0, 1]
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button size="sm" variant="outline">
-                <MessageSquare size={14} className="mr-1" /> Feedback
+              <Button 
+                size="sm" 
+                variant="outline"
+                onClick={() => setShowFeedbackForm(true)}
+              >
+                <MessageSquare size={14} className="mr-1" /> 피드백
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Send feedback about this problem</p>
+              <p>이 문제에 대한 피드백 보내기</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
       </div>
+
+      {/* 제출 완료 모달 */}
+      <Dialog open={showSubmitModal} onOpenChange={setShowSubmitModal}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>제출 완료</DialogTitle>
+            <DialogDescription>
+              코드가 성공적으로 제출되었습니다. 결과를 확인하시겠습니까?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex gap-2">
+            <Button variant="outline" onClick={() => setShowSubmitModal(false)}>
+              닫기
+            </Button>
+            <Button onClick={goToResults}>
+              결과 확인하기
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

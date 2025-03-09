@@ -5,7 +5,25 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { BarChart } from "@/components/charts/bar-chart";
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 interface ComparisonCardProps {
   comparisonData: {
@@ -17,42 +35,63 @@ interface ComparisonCardProps {
 }
 
 export function ComparisonCard({ comparisonData }: ComparisonCardProps) {
-  // Prepare data for bar chart
-  const chartData = {
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top" as const,
+      },
+      title: {
+        display: false,
+      },
+    },
+    scales: {
+      x: {
+        grid: {
+          display: false,
+        },
+      },
+      y: {
+        min: 0,
+        max: 100,
+        grid: {
+          color: "rgba(0, 0, 0, 0.1)",
+        },
+      },
+    },
+    barPercentage: 0.8,
+    categoryPercentage: 0.9,
+  };
+
+  const data = {
     labels: comparisonData.labels,
     datasets: [
       {
         label: "현재 점수",
         data: comparisonData.currentScores,
-        backgroundColor: [
-          "rgba(0, 102, 255, 0.8)",
-          "rgba(0, 102, 255, 0.8)",
-          "rgba(0, 102, 255, 0.8)",
-          "rgba(0, 102, 255, 0.8)",
-          "rgba(0, 102, 255, 0.8)",
-        ],
+        backgroundColor: "rgba(59, 130, 246, 0.8)",
+        borderColor: "rgb(59, 130, 246)",
+        borderWidth: 1,
+        borderRadius: 4,
+        barThickness: 20,
       },
       {
         label: "이전 점수",
         data: comparisonData.previousScores,
-        backgroundColor: [
-          "rgba(153, 102, 255, 0.8)",
-          "rgba(153, 102, 255, 0.8)",
-          "rgba(153, 102, 255, 0.8)",
-          "rgba(153, 102, 255, 0.8)",
-          "rgba(153, 102, 255, 0.8)",
-        ],
+        backgroundColor: "rgba(147, 51, 234, 0.8)",
+        borderColor: "rgb(147, 51, 234)",
+        borderWidth: 1,
+        borderRadius: 4,
+        barThickness: 20,
       },
       {
         label: "업계 평균",
         data: comparisonData.industryAverage,
-        backgroundColor: [
-          "rgba(201, 203, 207, 0.8)",
-          "rgba(201, 203, 207, 0.8)",
-          "rgba(201, 203, 207, 0.8)",
-          "rgba(201, 203, 207, 0.8)",
-          "rgba(201, 203, 207, 0.8)",
-        ],
+        backgroundColor: "rgba(156, 163, 175, 0.8)",
+        borderColor: "rgb(156, 163, 175)",
+        borderWidth: 1,
+        borderRadius: 4,
+        barThickness: 20,
       },
     ],
   };
@@ -97,10 +136,45 @@ export function ComparisonCard({ comparisonData }: ComparisonCardProps) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="h-64 sm:h-72 md:h-80 mb-6 sm:mb-8 w-full overflow-x-auto">
-          <div className="min-w-[300px] w-full h-full">
-            <BarChart data={chartData} width={300} height={240} />
-          </div>
+        <div className="h-[400px]">
+          <Bar
+            options={{
+              ...options,
+              maintainAspectRatio: false,
+              layout: {
+                padding: {
+                  left: 10,
+                  right: 10,
+                },
+              },
+              scales: {
+                ...options.scales,
+                x: {
+                  ...options.scales.x,
+                  stacked: false,
+                  ticks: {
+                    autoSkip: false,
+                    maxRotation: 0,
+                    minRotation: 0,
+                  },
+                },
+                y: {
+                  ...options.scales.y,
+                  stacked: false,
+                },
+              },
+            }}
+            data={{
+              ...data,
+              datasets: data.datasets.map((dataset, index) => ({
+                ...dataset,
+                categoryPercentage: 0.8,
+                barPercentage: 0.9,
+                barThickness: undefined,
+                maxBarThickness: 30,
+              })),
+            }}
+          />
         </div>
 
         <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 w-full">

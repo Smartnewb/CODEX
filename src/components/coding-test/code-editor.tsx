@@ -33,6 +33,7 @@ interface CodeEditorProps {
   timeLimit?: number; // in minutes
   onRun?: (code: string) => void;
   onSubmit?: (code: string) => void;
+  onChange?: (code: string) => void;
 }
 
 interface CodeHistory {
@@ -46,6 +47,7 @@ export function CodeEditor({
   timeLimit = 60,
   onRun,
   onSubmit,
+  onChange,
 }: CodeEditorProps) {
   const [code, setCode] = useState(initialCode);
   const [output, setOutput] = useState("");
@@ -67,6 +69,11 @@ export function CodeEditor({
   const [aiSuggestions, setAiSuggestions] = useState<string[]>([]);
   const [lineNumbers, setLineNumbers] = useState<string[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Add effect to update code when initialCode changes
+  useEffect(() => {
+    setCode(initialCode);
+  }, [initialCode]);
 
   // Generate line numbers
   useEffect(() => {
@@ -204,6 +211,12 @@ export function CodeEditor({
     }, 2000);
   };
 
+  const handleCodeChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newCode = e.target.value;
+    setCode(newCode);
+    onChange?.(newCode);
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     // Handle tab key for indentation
     if (e.key === "Tab") {
@@ -333,7 +346,7 @@ export function CodeEditor({
         <textarea
           ref={textareaRef}
           value={code}
-          onChange={(e) => setCode(e.target.value)}
+          onChange={handleCodeChange}
           onKeyDown={handleKeyDown}
           className="w-full h-full pl-12 p-4 font-mono text-sm bg-background resize-none focus:outline-none"
           spellCheck="false"

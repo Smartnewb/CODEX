@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ThemeSwitcher } from "@/components/theme-switcher";
-import { ArrowRight, Award, Calendar, Clock } from "lucide-react";
+import { ArrowRight, Award, Calendar, Clock, ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
@@ -31,6 +31,8 @@ export default function AssessmentHistoryPage() {
       score: 82,
       status: "완료",
       growth: "+9%",
+      type: "frontend-dev",
+      testId: "FE-2023-001"
     },
     {
       id: "assessment-2",
@@ -40,6 +42,8 @@ export default function AssessmentHistoryPage() {
       score: 85,
       status: "완료",
       growth: "+5%",
+      type: "algorithm",
+      testId: "ALG-2023-001"
     },
     {
       id: "assessment-3",
@@ -49,6 +53,8 @@ export default function AssessmentHistoryPage() {
       score: 92,
       status: "완료",
       growth: "+12%",
+      type: "backend-dev",
+      testId: "BE-2023-001"
     },
     {
       id: "assessment-4",
@@ -58,6 +64,8 @@ export default function AssessmentHistoryPage() {
       score: 78,
       status: "완료",
       growth: "+3%",
+      type: "react-dev",
+      testId: "REACT-2023-001"
     },
   ];
 
@@ -77,13 +85,13 @@ export default function AssessmentHistoryPage() {
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <Image
+              {/* <Image
                 src="https://api.dicebear.com/7.x/avataaars/svg?seed=developer&backgroundColor=f5f5f5"
                 alt="프로필 이미지"
                 width={36}
                 height={36}
                 className="rounded-full"
-              />
+              /> */}
               <span className="text-sm font-medium hidden sm:inline">
                 {user.name}
               </span>
@@ -94,6 +102,13 @@ export default function AssessmentHistoryPage() {
       </header>
 
       <main className="container mx-auto py-8 px-4">
+        <div className="mb-6">
+          <Link href="/dashboard">
+            <Button variant="ghost" className="pl-0">
+              <ArrowLeft size={16} className="mr-2" /> 대시보드로 돌아가기
+            </Button>
+          </Link>
+        </div>
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">평가 이력</h1>
           <p className="text-muted-foreground">
@@ -154,7 +169,7 @@ export default function AssessmentHistoryPage() {
 
                     <div>
                       <Button variant="outline" size="sm" asChild>
-                        <Link href="/result_for_developer">
+                        <Link href={`/result_for_developer/${assessment.type}/${assessment.testId}`}>
                           상세 결과 보기
                         </Link>
                       </Button>
