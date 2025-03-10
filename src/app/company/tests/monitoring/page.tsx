@@ -91,7 +91,7 @@ export default function TestMonitoringPage() {
     {
       id: "applicant-4",
       name: "최프로그래머",
-      avatar: "��‍💻",
+      avatar: "👩‍💻",
       test: "프론트엔드 개발자 역량 평가",
       progress: 60,
       timeRemaining: "25분",
@@ -375,13 +375,7 @@ export default function TestMonitoringPage() {
                     <div className="flex flex-col md:flex-row md:items-center gap-4">
                       <div className="flex items-center gap-3 min-w-[200px]">
                         <div className="relative">
-                          {/* <Image
-                            src={applicant.avatar}
-                            alt={applicant.name}
-                            width={40}
-                            height={40}
-                            className="rounded-full"
-                          /> */}
+                          <span className="text-2xl">{applicant.avatar}</span>
                           {applicant.alerts > 0 && (
                             <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white text-xs">
                               {applicant.alerts}
@@ -492,13 +486,7 @@ export default function TestMonitoringPage() {
                       <div className="flex flex-col md:flex-row md:items-center gap-4">
                         <div className="flex items-center gap-3 min-w-[200px]">
                           <div className="relative">
-                            {/* <Image
-                              src={alert.avatar}
-                              alt={alert.applicant}
-                              width={40}
-                              height={40}
-                              className="rounded-full"
-                            /> */}
+                            <span className="text-2xl">{alert.avatar}</span>
                             <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white text-xs">
                               !
                             </div>

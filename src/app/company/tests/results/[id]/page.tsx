@@ -150,14 +150,7 @@ export default function CandidateResultPage({
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <Image
-                src="https://api.dicebear.com/7.x/shapes/svg?seed=company&backgroundColor=f5f5f5"
-                alt="회사 로고"
-                width={36}
-                height={36}
-                className="rounded-full"
-              />
-              <span className="text-sm font-medium hidden sm:inline">
+              <span className="text-2xl">
                 {company.name}
               </span>
             </div>

@@ -60,7 +60,7 @@ export default function DetailedReportPage({
                 height={36}
                 className="rounded-full"
               /> */}
-              <span className="text-sm font-medium hidden sm:inline">
+              <span className="text-2xl">
                 {company.name}
               </span>
             </div>
