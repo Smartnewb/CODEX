@@ -101,7 +101,7 @@ export function LoginForm() {
   return (
     <Card className="w-full max-w-md mx-auto bg-white shadow-lg">
       <CardHeader className="space-y-2 text-center">
-        <CardTitle className="text-2xl font-bold">CodeAssess AI</CardTitle>
+        <CardTitle className="text-2xl font-bold">CODEX</CardTitle>
         <CardDescription>
           {userType === "company"
             ? "AI 기반 개발자 역량 평가 시스템"

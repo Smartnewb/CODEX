@@ -42,7 +42,7 @@ export function generatePDF(assessmentData: AssessmentData): void {
   // Add title
   doc.setFontSize(20);
   doc.setTextColor(0, 102, 255);
-  doc.text("CodeAssess AI 평가 결과", 105, 15, { align: "center" });
+  doc.text("CODEX 평가 결과", 105, 15, { align: "center" });
 
   // Add assessment info
   doc.setFontSize(14);
@@ -199,7 +199,7 @@ export function generatePDF(assessmentData: AssessmentData): void {
     doc.setFontSize(8);
     doc.setTextColor(150, 150, 150);
     doc.text(
-      `CodeAssess AI - ${assessmentData.title} - ${assessmentData.date}`,
+      `CODEX - ${assessmentData.title} - ${assessmentData.date}`,
       105,
       285,
       { align: "center" },

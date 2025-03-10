@@ -438,7 +438,7 @@ Given an array of integers nums and an integer target, return indices of the two
             >
               <ArrowLeft size={16} />
             </Link>
-            <span className="font-bold">CodeAssess AI</span>
+            <span className="font-bold">CODEX</span>
             <div className="ml-4 flex space-x-2 text-xs relative">
               <button 
                 className={`hover:text-primary px-2 py-1 relative ${showFileMenu ? 'bg-muted' : ''}`}

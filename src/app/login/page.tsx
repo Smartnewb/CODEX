@@ -11,7 +11,7 @@ export default function LoginPage() {
           </div>
         </div>
         <h1 className="text-4xl font-extrabold tracking-tight text-center mb-2">
-          CodeAssess AI에 오신 것을 환영합니다
+          CODEX에 오신 것을 환영합니다
         </h1>
         <p className="text-center text-muted-foreground mb-8">
           AI 기반 신입 개발자 평가 시스템
