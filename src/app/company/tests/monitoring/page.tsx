@@ -53,7 +53,7 @@ export default function TestMonitoringPage() {
     {
       id: "applicant-1",
       name: "김개발",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=developer1",
+      avatar: "👨‍💻",
       test: "프론트엔드 개발자 역량 평가",
       progress: 75,
       timeRemaining: "15분",
@@ -64,7 +64,7 @@ export default function TestMonitoringPage() {
     {
       id: "applicant-2",
       name: "이코딩",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=developer2",
+      avatar: "👩‍💻",
       test: "프론트엔드 개발자 역량 평가",
       progress: 45,
       timeRemaining: "32분",
@@ -79,7 +79,7 @@ export default function TestMonitoringPage() {
     {
       id: "applicant-3",
       name: "박엔지니어",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=developer3",
+      avatar: "🧑‍💻",
       test: "백엔드 개발자 코딩 테스트",
       progress: 90,
       timeRemaining: "5분",
@@ -91,7 +91,7 @@ export default function TestMonitoringPage() {
     {
       id: "applicant-4",
       name: "최프로그래머",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=developer4",
+      avatar: "��‍💻",
       test: "프론트엔드 개발자 역량 평가",
       progress: 60,
       timeRemaining: "25분",
@@ -102,7 +102,7 @@ export default function TestMonitoringPage() {
     {
       id: "applicant-5",
       name: "정데브",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=developer5",
+      avatar: "👩‍💻",
       test: "백엔드 개발자 코딩 테스트",
       progress: 30,
       timeRemaining: "42분",
@@ -116,7 +116,7 @@ export default function TestMonitoringPage() {
     {
       id: "alert-1",
       applicant: "이코딩",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=developer2",
+      avatar: "👩‍💻",
       test: "프론트엔드 개발자 역량 평가",
       type: "탭 전환",
       count: 2,
@@ -127,7 +127,7 @@ export default function TestMonitoringPage() {
     {
       id: "alert-2",
       applicant: "박엔지니어",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=developer3",
+      avatar: "🧑‍💻",
       test: "백엔드 개발자 코딩 테스트",
       type: "코드 복사",
       count: 1,
@@ -138,7 +138,7 @@ export default function TestMonitoringPage() {
     {
       id: "alert-3",
       applicant: "한알고리즘",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=developer6",
+      avatar: "��‍💻",
       test: "백엔드 개발자 코딩 테스트",
       type: "비정상 패턴",
       count: 1,

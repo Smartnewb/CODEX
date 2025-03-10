@@ -27,7 +27,7 @@ export default function AssessmentResultsPage() {
     date: "2023-04-15",
     user: {
       name: "김개발",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=developer",
+      avatar: "👨‍💻",
     },
     scores: {
       overall: 85,

@@ -19,7 +19,7 @@ export default function AssessmentHistoryPage() {
   // Mock data - would come from API in real app
   const user = {
     name: "김개발",
-    profileImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=developer",
+    profileImage: "👨‍💻",
   };
 
   const assessmentHistory = [

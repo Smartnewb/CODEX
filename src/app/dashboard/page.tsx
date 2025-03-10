@@ -79,7 +79,7 @@ export default function DashboardPage() {
   // 기본 사용자 정보 (프로필이 없을 경우 사용)
   const defaultUser = {
     name: "김개발",
-    profileImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=developer",
+    profileImage: "👨‍💻",
   };
 
   // 프로필 이름이 있는 경우 우선 사용

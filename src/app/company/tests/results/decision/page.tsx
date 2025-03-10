@@ -33,7 +33,7 @@ export default function HiringDecisionPage() {
     {
       id: "candidate-1",
       name: "김개발",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=developer1",
+      avatar: "👨‍💻",
       email: "kim.developer@example.com",
       github: "kimdev",
       linkedin: "kim-developer",
@@ -49,7 +49,7 @@ export default function HiringDecisionPage() {
     {
       id: "candidate-2",
       name: "이코딩",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=developer2",
+      avatar: "👩‍💻",
       email: "lee.coding@example.com",
       github: "leecoding",
       linkedin: "lee-coding",
@@ -65,7 +65,7 @@ export default function HiringDecisionPage() {
     {
       id: "candidate-3",
       name: "박엔지니어",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=developer3",
+      avatar: "🧑‍💻",
       email: "park.engineer@example.com",
       github: "parkengineer",
       linkedin: "park-engineer",

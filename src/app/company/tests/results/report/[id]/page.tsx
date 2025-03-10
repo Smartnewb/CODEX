@@ -22,7 +22,7 @@ export default function DetailedReportPage({
   const candidate = {
     id: params.id,
     name: "김개발",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=developer1",
+    avatar: "👨‍💻",
     score: 92,
     previousScore: 85,
     problemSolving: 95,

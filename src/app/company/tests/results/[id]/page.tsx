@@ -30,7 +30,7 @@ export default function CandidateResultPage({
   const candidate = {
     id: params.id,
     name: "김개발",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=developer1",
+    avatar: "👨‍💻",
     email: "kim.developer@example.com",
     github: "kimdev",
     linkedin: "kim-developer",
