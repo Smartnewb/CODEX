@@ -11,6 +11,7 @@ import {
 import { RadarChart } from "@/components/charts/radar-chart";
 import { ThumbsDown, ThumbsUp } from "lucide-react";
 import Image from "next/image";
+import { useState } from 'react';
 
 interface Candidate {
   id: string;
@@ -38,6 +39,22 @@ export function CandidateComparisonCard({
   candidates,
   onHireDecision,
 }: CandidateComparisonCardProps) {
+  const [candidateStatuses, setCandidateStatuses] = useState(
+    candidates.reduce((acc, candidate) => {
+      acc[candidate.id] = candidate.status;
+      return acc;
+    }, {} as Record<string, string>)
+  );
+
+  const handleDecision = (candidateId: string, decision: "hire" | "reject" | "hold") => {
+    const newStatus = decision === "hire" ? "합격" : decision === "reject" ? "불합격" : "보류";
+    setCandidateStatuses((prevStatuses) => ({
+      ...prevStatuses,
+      [candidateId]: newStatus
+    }));
+    onHireDecision(candidateId, decision);
+  };
+
   // Prepare data for radar chart
   const chartData = {
     labels: [
@@ -90,15 +107,16 @@ export function CandidateComparisonCard({
               {candidates.map((candidate) => (
                 <tr key={candidate.id} className="border-b">
                   <td className="py-3 px-4">
-                    <div className="flex items-center gap-2">
-                      <Image
-                        src={candidate.avatar}
-                        alt={candidate.name}
-                        width={32}
-                        height={32}
-                        className="rounded-full"
-                      />
-                      <span className="font-medium">{candidate.name}</span>
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="text-3xl">
+                        {candidate.avatar}
+                      </div>
+                      <div>
+                        <h3 className="font-semibold">{candidate.name}</h3>
+                        <p className="text-sm text-muted-foreground">
+                          점수: {candidate.score}/100
+                        </p>
+                      </div>
                     </div>
                   </td>
                   <td className="text-center py-3 px-4 font-bold">
@@ -124,9 +142,9 @@ export function CandidateComparisonCard({
                   </td>
                   <td className="text-center py-3 px-4">
                     <Badge
-                      className={`${candidate.status === "합격" ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" : candidate.status === "보류" ? "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-300" : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"}`}
+                      className={`${candidateStatuses[candidate.id] === "합격" ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" : candidateStatuses[candidate.id] === "보류" ? "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-300" : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"}`}
                     >
-                      {candidate.status}
+                      {candidateStatuses[candidate.id]}
                     </Badge>
                   </td>
                 </tr>
@@ -149,13 +167,9 @@ export function CandidateComparisonCard({
               {candidates.map((candidate) => (
                 <div key={candidate.id} className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <Image
-                      src={candidate.avatar}
-                      alt={candidate.name}
-                      width={24}
-                      height={24}
-                      className="rounded-full"
-                    />
+                    <div className="text-3xl">
+                      {candidate.avatar}
+                    </div>
                     <span className="font-medium">{candidate.name}</span>
                     <span className="ml-auto font-bold">
                       {candidate.matchRate}%
@@ -178,47 +192,42 @@ export function CandidateComparisonCard({
             <Card key={candidate.id}>
               <CardContent className="p-4">
                 <div className="flex flex-col items-center text-center">
-                  <Image
-                    src={candidate.avatar}
-                    alt={candidate.name}
-                    width={64}
-                    height={64}
-                    className="rounded-full mb-3"
-                  />
+                  <div className="text-3xl">
+                    {candidate.avatar}
+                  </div>
                   <h3 className="font-medium">{candidate.name}</h3>
                   <div className="flex items-center gap-1 mt-1 mb-3">
                     <Badge
-                      className={`${candidate.status === "합격" ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" : candidate.status === "보류" ? "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-300" : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"}`}
+                      className={`${candidateStatuses[candidate.id] === "합격" ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" : candidateStatuses[candidate.id] === "보류" ? "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-300" : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"}`}
                     >
-                      {candidate.status}
+                      {candidateStatuses[candidate.id]}
                     </Badge>
                   </div>
 
-                  <div className="flex gap-2 mt-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="w-full"
-                      onClick={() => onHireDecision(candidate.id, "reject")}
-                    >
-                      <ThumbsDown size={14} className="mr-1 text-red-500" />{" "}
-                      불합격
+                  <div className="flex gap-2 w-full justify-center">
+                    <Button 
+                      variant={candidateStatuses[candidate.id] === "불합격" ? "default" : "outline"} 
+                      className="flex-1" 
+                      size="sm" 
+                      onClick={() => handleDecision(candidate.id, "reject")}
+                    > 
+                      <ThumbsDown size={14} className="mr-1 text-red-500" /> 불합격
                     </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="w-full"
-                      onClick={() => onHireDecision(candidate.id, "hold")}
-                    >
+                    <Button 
+                      variant={candidateStatuses[candidate.id] === "보류" ? "default" : "outline"} 
+                      className="flex-1" 
+                      size="sm" 
+                      onClick={() => handleDecision(candidate.id, "hold")}
+                    > 
                       보류
                     </Button>
-                    <Button
-                      size="sm"
-                      className="w-full"
-                      onClick={() => onHireDecision(candidate.id, "hire")}
-                    >
-                      <ThumbsUp size={14} className="mr-1 text-green-500" />{" "}
-                      합격
+                    <Button 
+                      variant={candidateStatuses[candidate.id] === "합격" ? "default" : "outline"} 
+                      className="flex-1" 
+                      size="sm" 
+                      onClick={() => handleDecision(candidate.id, "hire")}
+                    > 
+                      <ThumbsUp size={14} className="mr-1 text-green-500" /> 합격
                     </Button>
                   </div>
                 </div>

@@ -15,6 +15,7 @@ interface CandidateProfileCardProps {
     status: string;
     testDuration: string;
     completedAt: string;
+    position?: string;
   };
   testInfo: {
     title: string;
@@ -30,14 +31,17 @@ export function CandidateProfileCard({
     <Card>
       <CardContent className="p-6">
         <div className="flex flex-col items-center text-center">
-          <Image
-            src={candidate.avatar}
-            alt={candidate.name}
-            width={96}
-            height={96}
-            className="rounded-full mb-4"
-          />
-          <h1 className="text-2xl font-bold mb-1">{candidate.name}</h1>
+          <div className="flex items-center gap-4 mb-4">
+            <div className="text-3xl">
+              {candidate.avatar}
+            </div>
+            <div>
+              <h3 className="font-semibold text-lg">{candidate.name}</h3>
+              <p className="text-sm text-muted-foreground">
+                {candidate.position || "지원자"}
+              </p>
+            </div>
+          </div>
           <Badge
             className={`${candidate.status === "합격" ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" : candidate.status === "보류" ? "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-300" : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"} mb-4`}
           >

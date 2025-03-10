@@ -4,7 +4,6 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { CandidateComparisonCard } from "@/components/hiring/candidate-comparison-card";
@@ -13,6 +12,12 @@ import { GrowthRoadmapCard } from "@/components/hiring/growth-roadmap-card";
 import { LinkedInOfferCard } from "@/components/hiring/linkedin-offer-card";
 import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export default function HiringDecisionPage() {
   const [activeTab, setActiveTab] = useState("comparison");
@@ -21,7 +26,6 @@ export default function HiringDecisionPage() {
   // Mock data - would come from API in real app
   const company = {
     name: "테크스타트 주식회사",
-    logo: "https://api.dicebear.com/7.x/shapes/svg?seed=company",
   };
 
   const testInfo = {
@@ -166,9 +170,8 @@ export default function HiringDecisionPage() {
       action: <ToastAction altText="확인">확인</ToastAction>,
     });
 
-    // Set the selected candidate for the next tabs
+    // Set the selected candidate for the next tabs without switching tabs
     setSelectedCandidate(candidateId);
-    setActiveTab("prediction");
   };
 
   // Handle sending roadmap

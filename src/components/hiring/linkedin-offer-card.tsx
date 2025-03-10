@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { Linkedin, Send } from "lucide-react";
+import { Linkedin, Send, Mail } from "lucide-react";
 import Image from "next/image";
 
 interface LinkedInOfferCardProps {
@@ -47,21 +47,15 @@ export function LinkedInOfferCard({
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="flex items-center gap-4 p-4 bg-muted rounded-lg">
-          <Image
-            src={candidate.avatar}
-            alt={candidate.name}
-            width={64}
-            height={64}
-            className="rounded-full"
-          />
+        <div className="flex items-center gap-4 mb-6">
+          <div className="text-3xl">
+            {candidate.avatar}
+          </div>
           <div>
-            <h3 className="font-medium text-lg">{candidate.name}</h3>
-            <div className="flex items-center gap-2 mt-1">
-              <Linkedin size={16} className="text-[#0A66C2]" />
-              <span className="text-sm text-muted-foreground">
-                linkedin.com/in/{candidate.linkedin}
-              </span>
+            <h2 className="text-xl font-semibold">{candidate.name}</h2>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Mail size={14} />
+              <span>{candidate.email}</span>
             </div>
           </div>
         </div>
